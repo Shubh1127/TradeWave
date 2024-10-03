@@ -3,7 +3,7 @@ import React from 'react'
 function Pricing() {
     return (  
         <div className='container'>
-                <div className='row mb-5  mt-5'>
+                <div className='row mb-5  mx-5 mt-5'>
                     <div className='col-4'>
                         <h1 className=' mb-5'>Unbeatable pricing</h1>
                         <p>We pioneered the concept of discount broking and price transparency in India. Flat fees and no hidden charges.</p>

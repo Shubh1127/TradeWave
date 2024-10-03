@@ -3,7 +3,7 @@ import React from "react";
 function Awards() {
   return (
     <div className="container mt-5">
-      <div className="row   ">
+      <div className="row  mx-5 ">
         <div className="col-6 p-5 ">
           <img src="media/images/largestBroker.svg" />
         </div>
