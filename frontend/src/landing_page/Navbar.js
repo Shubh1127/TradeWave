@@ -1,13 +1,13 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 function Navbar() {
   return (
     
-      <nav class="navbar navbar-expand-lg  border-bottom  bg-body-tertiary position-fixed" style={{backgroundColor:"#fff",width:"100%"}}>
+      <nav class="navbar navbar-expand-lg  border-bottom  bg-body-tertiary " style={{backgroundColor:"#fff",width:"100%"}}>
         <div class="container p-2">
-          <a class="navbar-brand" href="#">
+          <Link class="navbar-brand" to="/">
             <img src="media/images/logo.svg" alt="logo" style={{width:"20%",marginLeft:"48px"}}></img>
-          </a>
+          </Link>
           <button
             class="navbar-toggler"
             type="button"
@@ -24,29 +24,29 @@ function Navbar() {
             <form class="d-flex" role="search">
             <ul className="navbar-nav d-felx justify-content-between  me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <Link class="nav-link active" aria-current="page" to="/signup">
                   Signup
-                </a>
+                </Link>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <Link class="nav-link active" to="/about">
                   About
-                </a>
+                </Link>
               </li> 
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <Link class="nav-link active" to="/product">
                   Products
-                </a>
+                </Link>
               </li> 
               <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <Link class="nav-link active" to="/pricing">
                   Pricing
-                </a>
+                </Link>
               </li> 
               <li className="nav-item  ">
-                <a className="nav-link active" href="#">
+                <Link className="nav-link active" to="support">
                   Support 
-                </a>
+                </Link>
               </li> 
             </ul>
             </form>
