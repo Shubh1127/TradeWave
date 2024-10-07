@@ -1,8 +1,14 @@
 import React from 'react'
+import TopBar from "./TopBar"
+import Dashboard from './Dashboard'
 
 function Home() {
   return (
-    <div>Home</div>
+    <>
+    <TopBar/>
+    <Dashboard/>
+    </>
+    
   )
 }
 
