@@ -1,23 +1,101 @@
-import React from 'react'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-function Menu() {
+const Menu = () => {
+  const [selectedMenu, setSelectedMenu] = useState(0);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+
+  const handleMenuClick = (index) => {
+    setSelectedMenu(index);
+  };
+
+  const handleProfileClick = (index) => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  const menuClass = "menu";
+  const activeMenuClass = "menu selected";
+
   return (
-    <div className='d-flex justify-content-evenly flex-grow-1 p-3 border-bottom'>
-      <div>
-        <img src='https://seeklogo.com/images/Z/zerodha-kite-logo-89879A6A11-seeklogo.com.png' style={{width:"10%"}}/>
-      </div>
-      <p>Dashboard</p>
-      <p>Orders</p>
-      <p>Holdings</p>
-      <p>Positions</p>
-      <p>Funds</p>
-      <p>Apps</p>
-      <div className='d-flex '>
-      <div className='bg-secondary d-flex justify-content-center align-items-center' style={{borderRadius:"50%",height:"2rem",width:"2rem"}}>ZU</div>
-      <p className='pt-1 ps-1'>UserId</p>
+    <div className="menu-container">
+      <img src="logo.png" style={{ width: "50px" }} />
+      <div className="menus">
+        <ul>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/"
+              onClick={() => handleMenuClick(0)}
+            >
+              <p className={selectedMenu === 0 ? activeMenuClass : menuClass}>
+                Dashboard
+              </p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/orders"
+              onClick={() => handleMenuClick(1)}
+            >
+              <p className={selectedMenu === 1 ? activeMenuClass : menuClass}>
+                Orders
+              </p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/holdings"
+              onClick={() => handleMenuClick(2)}
+            >
+              <p className={selectedMenu === 2 ? activeMenuClass : menuClass}>
+                Holdings
+              </p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/positions"
+              onClick={() => handleMenuClick(3)}
+            >
+              <p className={selectedMenu === 3 ? activeMenuClass : menuClass}>
+                Positions
+              </p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="funds"
+              onClick={() => handleMenuClick(4)}
+            >
+              <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
+                Funds
+              </p>
+            </Link>
+          </li>
+          <li>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/apps"
+              onClick={() => handleMenuClick(6)}
+            >
+              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
+                Apps
+              </p>
+            </Link>
+          </li>
+        </ul>
+        <hr />
+        <div className="profile" onClick={handleProfileClick}>
+          <div className="avatar">ZU</div>
+          <p className="username">USERID</p>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;
