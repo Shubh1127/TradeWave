@@ -2,19 +2,21 @@ import React from 'react'
 import Menu from "./Menu"
 function TopBar() {
   return (
-    <div className='topbar-container'>
+    <div className='topbar-container d-flex  align-items-center'>
         <div className='indices-container'>
-            <div className='nifty'>
-                <p className='index'>NIFTY 50</p>
-                <p className='index-points'>{100.2}</p>
+          <div className='d-flex justify-content-between border-bottom border-end p-3' style={{width:"30rem"}}>
+            <span className='d-flex'>
+            <p className='  '>NIFTY 50</p>
+                <p className='index-points ms-5'>{100.2}</p>
                 <p className='percent'></p>
-            </div>
-            <div className='sensex'>
-                <p className='index'>SENSEX</p>
-                <p className='index-points'>{100.2}</p>
+            </span>
+            <span className='d-flex'>
+            <p className='  me-5'>SENSEX</p>
+                <p className='index-points ms-5'>{100.2}</p>
                 <p className='percent'></p>
-               
-            </div>
+            </span>
+          </div>
+            
         </div>
         <Menu/>
     </div>
