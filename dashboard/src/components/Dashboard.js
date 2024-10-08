@@ -8,14 +8,14 @@ import Positions from "./Positions";
 import Summary from "./Summary";
 import WatchList from "./WatchList";
 import Apps from "./App";
-// import { GeneralContextProvider } from "./GeneralContext";
+import { GeneralContextProvider } from "./GeneralContext";
 
 const Dashboard = () => {
   return (
     <div className="dashboard-container">
-      {/* <GeneralContextProvider> */}
+      <GeneralContextProvider>
         <WatchList />
-      {/* </GeneralContextProvider> */}
+      </GeneralContextProvider>
       <div className="content">
         <Routes>
           <Route exact path="/" element={<Summary />} />
