@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import GeneralContext from "./GeneralContext"; // Import GeneralContext
+import GeneralContext from "./GeneralContext"; 
 import "./BuyActionWindow.css";
 
 const BuyActionWindow = ({ uid }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const [stockPrice, setStockPrice] = useState(0.0);
 
-  // Use the useContext hook to access closeBuyWindow
+
   const { closeBuyWindow } = useContext(GeneralContext);
 
   const handleBuyClick = () => {
@@ -19,11 +19,11 @@ const BuyActionWindow = ({ uid }) => {
       mode: "BUY",
     });
 
-    closeBuyWindow(); // Call the function from context
+    closeBuyWindow(); 
   };
 
   const handleCancelClick = () => {
-    closeBuyWindow(); // Call the function from context
+    closeBuyWindow(); 
   };
 
   return (
