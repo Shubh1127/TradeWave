@@ -19,7 +19,7 @@ MongoDB: A MongoDB instance for the backend database.<br>
 <br>
 Steps<br>
 1.Clone the repository:<br>
-git clone https://github.com/your-username/TradeWave.git<br>
+git clone https://github.com/Shubh1127/TradeWave.git<br>
 cd TradeWave<br>
 <br>
 2.Install dependencies for each folder:<br>
