@@ -1,14 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import GeneralContext from "./GeneralContext"; 
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
-  const [stockPrice, setStockPrice] = useState(0.0);
-
-
   const { closeBuyWindow } = useContext(GeneralContext);
 
   const handleBuyClick = () => {
@@ -28,6 +24,7 @@ const BuyActionWindow = ({ uid }) => {
 
   return (
     <div className="container" id="buy-window" draggable="true">
+      <h2>Buying {stockName}</h2> {/* Displaying the stock name */}
       <div className="regular-order">
         <div className="inputs">
           <fieldset>
@@ -47,8 +44,8 @@ const BuyActionWindow = ({ uid }) => {
               name="price"
               id="price"
               step="0.05"
-              onChange={(e) => setStockPrice(e.target.value)}
-              value={stockPrice}
+              value={stockPrice} // Use passed stock price
+              readOnly // Make price read-only as it is determined by the selected stock
             />
           </fieldset>
         </div>
@@ -57,12 +54,12 @@ const BuyActionWindow = ({ uid }) => {
       <div className="buttons">
         <span>Margin required ₹140.65</span>
         <div>
-          <Link className="btn btn-blue" onClick={handleBuyClick}>
+          <button className="btn btn-blue" onClick={handleBuyClick}>
             Buy
-          </Link>
-          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
+          </button>
+          <button className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
-          </Link>
+          </button>
         </div>
       </div>
     </div>
