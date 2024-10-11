@@ -5,6 +5,7 @@ const OrdersSchema = new Schema({
   qty: Number,
   price: Number,
   mode: String,
+  userId: { type: String, required: true }, // Ensure userId is defined
 });
 
 module.exports = { OrdersSchema };

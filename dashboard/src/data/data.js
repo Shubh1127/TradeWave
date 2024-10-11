@@ -1,59 +1,69 @@
 export const watchlist = [
-    {
-      name: "INFY",
-      price: 1555.45,
-      percent: "-1.60%",
-      isDown: true,
-    },
-    {
-      name: "ONGC",
-      price: 116.8,
-      percent: "-0.09%",
-      isDown: true,
-    },
-    {
-      name: "TCS",
-      price: 3194.8,
-      percent: "-0.25%",
-      isDown: true,
-    },
-    {
-      name: "KPITTECH",
-      price: 266.45,
-      percent: "3.54%",
-      isDown: false,
-    },
-    {
-      name: "QUICKHEAL",
-      price: 308.55,
-      percent: "-0.15%",
-      isDown: true,
-    },
-    {
-      name: "WIPRO",
-      price: 577.75,
-      percent: "0.32%",
-      isDown: false,
-    },
-    {
-      name: "M&M",
-      price: 779.8,
-      percent: "-0.01%",
-      isDown: true,
-    },
-    {
-      name: "RELIANCE",
-      price: 2112.4,
-      percent: "1.44%",
-      isDown: false,
-    },
-    {
-      name: "HUL",
-      price: 512.4,
-      percent: "1.04%",
-      isDown: false,
-    },
-  ];
+  {
+    id: 1, // Unique ID
+    name: "INFY",
+    price: 1555.45,
+    percent: "-1.60%",
+    isDown: true,
+  },
+  {
+    id: 2, // Unique ID
+    name: "ONGC",
+    price: 116.8,
+    percent: "-0.09%",
+    isDown: true,
+  },
+  {
+    id: 3, // Unique ID
+    name: "TCS",
+    price: 3194.8,
+    percent: "-0.25%",
+    isDown: true,
+  },
+  {
+    id: 4, // Unique ID
+    name: "KPITTECH",
+    price: 266.45,
+    percent: "3.54%",
+    isDown: false,
+  },
+  {
+    id: 5, // Unique ID
+    name: "QUICKHEAL",
+    price: 308.55,
+    percent: "-0.15%",
+    isDown: true,
+  },
+  {
+    id: 6, // Unique ID
+    name: "WIPRO",
+    price: 577.75,
+    percent: "0.32%",
+    isDown: false,
+  },
+  {
+    id: 7, // Unique ID
+    name: "M&M",
+    price: 779.8,
+    percent: "-0.01%",
+    isDown: true,
+  },
+  {
+    id: 8, // Unique ID
+    name: "RELIANCE",
+    price: 2112.4,
+    percent: "1.44%",
+    isDown: false,
+  },
+  {
+    id: 9, // Unique ID
+    name: "HUL",
+    price: 512.4,
+    percent: "1.04%",
+    isDown: false,
+  },
+];
+
   
   // holdings
   export const holdings = [

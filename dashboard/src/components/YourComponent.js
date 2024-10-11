@@ -3,22 +3,21 @@ import { watchlist } from './data'; // Ensure you import your watchlist
 import GeneralContext from './GeneralContext';
 
 const YourComponent = () => {
-  const { openBuyWindow } = useContext(GeneralContext);
+  const { openBuyWindow,userId } = useContext(GeneralContext);
 
   const handleOpenBuyWindow = (stock) => {
-    openBuyWindow(stock.name, stock.price); // Pass both stock name and price
+    openBuyWindow(stock.name, stock.price,userId); // Pass both stock name and price
   };
 
-  return (
-    <div>
-      {watchlist.map((stock) => (
+  {watchlist.map((stock) => {
+   
+    return (
         <div key={stock.name}>
-          <span>{stock.name} - ₹{stock.price}</span>
-          <button onClick={() => handleOpenBuyWindow(stock)}>Buy</button>
+            <span>{stock.name} - ₹{stock.price}</span>
+            <button onClick={() => handleOpenBuyWindow(stock)}>Buy</button>
         </div>
-      ))}
-    </div>
-  );
+    );
+})}
 };
 
 export default YourComponent;
