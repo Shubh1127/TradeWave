@@ -40,7 +40,20 @@ mongoose.connect(url)
   .catch((err) => console.log("Problem in connecting to the Database", err));
 
 
-app.post("/signup")
+app.post("/signup",async (req,res)=>{
+  let {username,email,password}=req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+}
+
+  const newUser=new User({
+    email,
+    username
+  })
+  const registeredUser=await User.register(newUser,password)
+  res.status(200).json(registeredUser)
+})
 
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {
