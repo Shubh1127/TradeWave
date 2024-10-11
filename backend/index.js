@@ -3,6 +3,11 @@ const express = require("express");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const passport=require("passport")
+const LocalStrategy= require("passport-local")
+const session=require('express-session')
+const User=require('./model/userModel')
+
 
 const { HoldingsModel } = require('./model/HoldingsModel');
 const { OrdersModel } = require('./model/OrdersModel');
@@ -13,10 +18,29 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const sessionOptions={
+  secret:"mysecretcode",
+    resave:false,
+    saveUninitialized: true,
+    cookie:{
+        expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly:true
+    }
+}
+
+app.use(session(sessionOptions))
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+
 // Connect to MongoDB
 mongoose.connect(url)
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Problem in connecting to the Database", err));
+
+
+app.post("/signup")
 
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {
@@ -41,14 +65,9 @@ app.get("/allPositions", async (req, res) => {
 // New order route
 app.post("/newOrder", async (req, res) => {
   const { name, qty, price, mode, userId } = req.body;
-
-  // console.log("Name received:", name);  // Add this line to check if `name` is received
   if (!name) {
     return res.status(400).send("Stock name is required");
   }
-
-  
-
   const newOrder = new OrdersModel({ name, qty, price, mode, userId });
 
   try {
@@ -63,8 +82,8 @@ app.post("/newOrder", async (req, res) => {
 
 
 
-// New route to fetch orders for a specific user
-app.get("/orders/:userId", async (req, res) => {
+
+app.get("/allorders", async (req, res) => {
   try {
     let allOrders = await OrdersModel.find({});
     res.json(allOrders);

@@ -9,7 +9,7 @@ const Orders = ({ userId }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:3002/orders/${userId}`);
+        const response = await axios.get(`http://localhost:3002/allorders`);
         // console.log("Fetched orders:", response.data);
         setOrders(response.data);
       } catch (error) {
