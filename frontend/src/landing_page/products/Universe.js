@@ -2,7 +2,12 @@ import React from "react";
 import Hero from "./Hero";
 import LeftSection from "./LeftSection";
 import RightSection from "./RightSection";
+import { useNavigate } from 'react-router-dom';
 function Universe() {
+  const navigate = useNavigate(); 
+    const handleSignupClick = () => {
+        navigate('/signup'); // Navigate to the signup page when the button is clicked
+    };
   return (
     <div className="container mt-5">
       <div className="row text-center">
@@ -66,7 +71,7 @@ function Universe() {
         
         </div>
         <div className="mb-5">
-        <button className="p-2 btn btn-primary fs-5 mt-3" style={{ width: "15%", margin: "0 auto" }}> Signup now</button>
+        <button className="p-2 btn btn-primary fs-5 mt-3" onClick={handleSignupClick} style={{ width: "15%", margin: "0 auto" }}> Signup now</button>
         </div>
       </div>
     </div>
