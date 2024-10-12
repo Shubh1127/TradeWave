@@ -8,19 +8,36 @@ const Menu = () => {
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
   };
+  const handleLogut=async ()=>{
+    try{
 
-  const handleProfileClick = (index) => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
-  };
+      const response=await fetch('http://localhost:3002/logout',{
+        method:'GET',
+        credentials: 'include',
+      })
+      const result =await response.json();
+      if(response.ok){
+        console.log("user logout",result)
+        window.location.href = "http://localhost:3001"
+      }else{
+        console.log("logout failed")
+      }
+    }catch(err){
+      console.error('Error:',err)
+    }
+
+  }
+
+ 
 
   const menuClass = "menu";
   const activeMenuClass = "menu selected";
 
   return (
-    <div className="menu-container">
+    <div className="menu-container ">
       <img src="logo.png" style={{ width: "50px" }} />
-      <div className="menus">
-        <ul>
+      <div className="menus  d-flex align-items-center gap-3 justify-content-evenly">
+        <ul className="mt-2 pt-3">
           <li>
             <Link
               style={{ textDecoration: "none" }}
@@ -76,22 +93,10 @@ const Menu = () => {
               </p>
             </Link>
           </li>
-          {/* <li>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/apps"
-              onClick={() => handleMenuClick(6)}
-            >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
-                Apps
-              </p>
-            </Link>
-          </li> */}
+          
         </ul>
-        <hr />
-        <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
+        <div className="profile" >
+              <button  className="btn btn-primary rounded-1 p-1 " onClick={handleLogut}>Logout</button>
         </div>
       </div>
     </div>

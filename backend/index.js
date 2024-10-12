@@ -16,6 +16,9 @@ const url = process.env.MONGO_URL;
 const app = express();
 
 app.use(cors());
+app.use(cors({ 
+  credentials: true, 
+}));
 app.use(bodyParser.json());
 
 const sessionOptions={
@@ -34,26 +37,78 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 // Connect to MongoDB
 mongoose.connect(url)
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Problem in connecting to the Database", err));
 
 
-app.post("/signup",async (req,res)=>{
-  let {username,email,password}=req.body;
+  app.post("/signup", async (req, res) => {
+    const { username, email, password } = req.body;
+  
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+  
+    try {
+      // Check if the user already exists
+      const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+  
+      if (existingUser) {
+        return res.status(400).json({ message: "User already registered" });
+      }
+  
+      // Create a new user
+      const newUser = new User({
+        email,
+        username,
+      });
+  
+      // Register the new user
+      const registeredUser = await User.register(newUser, password);
+      
+      // Send response with the registered user data (omit password for security)
+      res.status(201).json({ message: "User registered successfully", user: registeredUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "An error occurred during signup" });
+    }
+  });
+  
 
-  if (!password) {
-    return res.status(400).json({ message: "Password is required" });
-}
+app.post("/login", (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error('Error during authentication:', err); // Log the error
+      return res.status(500).json({ message: 'An error occurred during login' });
+    }
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error('Login failed:', err); // Log the error
+        return res.status(500).json({ message: 'Login failed' });
+      }
+      return res.status(200).json({ message: 'Login successfully' });
+    });
+  })(req, res, next);
+});
 
-  const newUser=new User({
-    email,
-    username
+
+app.get("/logout",(req,res,next)=>{
+  req.logout((err)=>{
+    if(err){
+      return next(err)
+    }
+    res.status(200).json({ message: 'Logged out successfully' });
   })
-  const registeredUser=await User.register(newUser,password)
-  res.status(200).json(registeredUser)
+
 })
+
 
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {

@@ -1,10 +1,11 @@
 import React from 'react'
 import {useForm} from "react-hook-form"
-import {useNavigate} from "react-router-dom"
+import {Link} from "react-router-dom"
+// import {useNavigate} from "react-router-dom"
 
 function Signup() {
     let {register,handleSubmit}=useForm();
-    let navigate=useNavigate();
+    // let navigate=useNavigate();
     let onSubmitHandler=async(data)=>{
         // console.log(data)
         const response= await fetch("http://localhost:3002/signup",{
@@ -15,12 +16,14 @@ function Signup() {
             body: JSON.stringify(data),
         })
         const result =await response.json();
+
         if (response.ok) {
             console.log('User registered:', result);
-            navigate('/dashboard')
+            window.location.href = "http://localhost:3000";
 
         } else {
             console.error('Error:', result.message);
+            alert(result.message); 
         }
     }
     return ( 
@@ -40,6 +43,7 @@ function Signup() {
                     <label htmlFor="password" className="text-start ps-2">Password</label>
                     <input className="m-2 p-1 rounded " type="password" placeholder="Enter password" id="password" {...register("password")}></input>
                     <button className='btn btn-primary ms-5 mt-5' style={{width:"10rem"}} type="submit">Sign Up</button>
+                    <p className='ms-4 ps-4 mt-3'>Already registered? <Link to='/login' style={{ textDecoration: 'none' }} >Login</Link></p>
                     </form>
                    
                 </div>
