@@ -17,6 +17,7 @@ const app = express();
 
 app.use(cors());
 app.use(cors({ 
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true, 
 }));
 app.use(bodyParser.json());
@@ -24,11 +25,12 @@ app.use(bodyParser.json());
 const sessionOptions={
   secret:"mysecretcode",
     resave:false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie:{
         expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly:true
+        httpOnly:true,
+        sameSite:'lax'
     }
 }
 
@@ -37,8 +39,17 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
+passport.serializeUser((user, done) => {
+  done(null, user.id); // Here you save the user ID in the session
+});
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id); // Retrieve the user from the database
+    done(null, user); // Attach user to req.user
+  } catch (err) {
+    done(err);
+  }
+});
 
 // Connect to MongoDB
 mongoose.connect(url)
@@ -69,8 +80,7 @@ mongoose.connect(url)
   
       // Register the new user
       const registeredUser = await User.register(newUser, password);
-      
-      // Send response with the registered user data (omit password for security)
+
       res.status(201).json({ message: "User registered successfully", user: registeredUser });
     } catch (error) {
       console.error(error);
@@ -79,24 +89,26 @@ mongoose.connect(url)
   });
   
 
-app.post("/login", (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      console.error('Error during authentication:', err); // Log the error
-      return res.status(500).json({ message: 'An error occurred during login' });
-    }
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-    req.logIn(user, (err) => {
+  app.post("/login", (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
       if (err) {
-        console.error('Login failed:', err); // Log the error
-        return res.status(500).json({ message: 'Login failed' });
+        console.error('Error during authentication:', err);
+        return res.status(500).json({ message: 'An error occurred during login' });
       }
-      return res.status(200).json({ message: 'Login successfully' });
-    });
-  })(req, res, next);
-});
+      if (!user) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error('Login failed:', err);
+          return res.status(500).json({ message: 'Login failed' });
+        }
+        // Send a successful login response
+        return res.status(200).json({ message: 'Login successful', user: user });
+      });
+    })(req, res, next);
+  });
+  
 
 
 app.get("/logout",(req,res,next)=>{
@@ -104,11 +116,36 @@ app.get("/logout",(req,res,next)=>{
     if(err){
       return next(err)
     }
+    req.session.destroy();
     res.status(200).json({ message: 'Logged out successfully' });
   })
 
 })
 
+
+app.get('/api/user', (req, res) => {
+  // console.log("User from session:", req.user); 
+  if (req.isAuthenticated()) {
+    return res.status(200).json(req.user);
+  } else {
+      res.status(401).json({ message: 'Unauthorized' });
+  }
+});
+
+app.get('/currentUser', (req, res) => {
+  if (req.isAuthenticated()) {
+    // User is authenticated, return user info
+    console.log(req.user)
+    return res.json({
+      username: req.user.username, // Adjust based on your user model
+      email: req.user.email, // If you want to return more info
+      // Add any other user properties you want to expose
+    });
+  } else {
+    // User is not authenticated
+    return res.status(401).json({ message: 'User not authenticated' });
+  }
+});
 
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {

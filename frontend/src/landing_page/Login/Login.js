@@ -14,10 +14,13 @@ export default function Login(){
             body:JSON.stringify(data)
             
         })
+        
         const result=await response.json()
-        if(response.ok){
+       if(response.ok){
             window.location.href = "http://localhost:3000";
-        }else{
+           console.log(result)
+       }
+        else{
             console.error("login failed")
         }
     }

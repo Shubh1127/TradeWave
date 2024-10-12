@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { UserContext } from './UserContext'; // Adjust the path as needed
 
 const Summary = () => {
+  const { userInfo } = useContext(UserContext); // Access user info from context
+  console.log(userInfo)
+  const username = userInfo?.username || 'User'; // Use user info from context
+
   return (
     <>
       <div className="username">
-        <h6>Hi, User!</h6>
+        <h6>Hi, {username}!</h6>
         <hr className="divider" />
       </div>
 

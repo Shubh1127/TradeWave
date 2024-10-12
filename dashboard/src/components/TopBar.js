@@ -1,5 +1,5 @@
 import React from "react";
-
+import { UserProvider } from "./UserContext";
 import Menu from "./Menu";
 
 const TopBar = () => {
@@ -18,7 +18,9 @@ const TopBar = () => {
         </div>
       </div>
 
-      <Menu />
+      <UserProvider>
+        <Menu />
+      </UserProvider>
     </div>
   );
 };
