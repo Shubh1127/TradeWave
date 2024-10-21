@@ -1,23 +1,17 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from './UserContext'; // Adjust the import path as needed
+import { UserContext } from "./UserContext";
 
 const Menu = () => {
-  const { isLoggedIn, logout } = useContext(UserContext); // Access login status and logout function
+ const {user,logout}=useContext(UserContext)
+ 
   const [selectedMenu, setSelectedMenu] = useState(0);
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout(); // Call the logout function from context
-      window.location.href = "http://localhost:3001"; // Redirect after logout
-    } catch (err) {
-      console.error("Error during logout:", err);
-    }
-  };
+
 
   const menuClass = "menu";
   const activeMenuClass = "menu selected";
@@ -84,18 +78,15 @@ const Menu = () => {
           </li>
         </ul>
         <div className="profile">
-          {isLoggedIn ? (
-             <Link to="/login">
-             <button className="btn btn-primary rounded-1 p-1">
-               Login
-             </button>
-           </Link>
-          ) : (
-            <button className="btn btn-primary rounded-1 p-1" onClick={handleLogout}>
-              Logout
+         {user ?(
+          <button className="btn btn-primary rounded-1 p-1" onClick={logout}>Logout</button>
+         ):(
+           <Link to='/login'>
+            <button className="btn btn-primary rounded-1 p-1"> 
+              Login
             </button>
-           
-          )}
+           </Link> 
+         )}
         </div>
       </div>
     </div>

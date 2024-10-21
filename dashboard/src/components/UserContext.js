@@ -1,78 +1,49 @@
-import React, { createContext, useState } from 'react';
+import React, { useState,createContext } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
-// Create the context
-export const UserContext = createContext();
+export const UserContext=createContext();
 
-// Create the provider component
-export const UserProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); // To store user info
+export const  UserProvider = ({children}) => {
+  let [user,setUser]=useState(null);
+ 
+  const navigate=useNavigate()
+ 
+   const login =async (data)=>{
+    try{
 
-  const fetchUserStatus = async () => {
-    try {
-      const response = await fetch('http://localhost:3002/currentUser', {
-        method: 'GET',
-        credentials: 'include', // Ensure credentials are included
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if(data){
-            console.log(data)
-        }
-        else{
-            console.log('not fetching')
-        }
-        setIsLoggedIn(true);
-        setUserInfo(data); // Assuming your API returns user data
-      } else {
-        setIsLoggedIn(false);
-        setUserInfo(null);
+      const response= await axios.post("http://localhost:3002/login",data);
+      if(response.data.user){
+        setUser(response.data.user);
+        console.log(user)
+        
       }
-    } catch (error) {
-      console.error("Error fetching user status:", error);
+     
+        return {ok:true,user:response.data.user};
+      
+    }catch(error){
+      console.error("login failed",error);
+     
+      return {sucess:false,error:error.response ? error.response.data:"Network error"}
     }
-  };
-
-  const login = async (userData) => {
-    // Implement your login logic here (e.g., calling a login API)
-    const response = await fetch('http://localhost:3002/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include', // Include credentials for cookie-based sessions
-      body: JSON.stringify(userData), // Send user data for authentication
-    });
-
-    if (response.ok) {
-      // Call fetchUserStatus to get current user info after successful login
-      await fetchUserStatus();
-    } else {
-      console.error("Login failed:", response.status);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      const response = await fetch('http://localhost:3002/logout', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      if (response.ok) {
-        setIsLoggedIn(false); // Update login status
-        setUserInfo(null); // Clear user info
-      } else {
-        console.error("Logout failed with status:", response.status);
+  }
+  const logout=async()=>{
+    try{
+      const response=await axios.get('http://localhost:3002/logout');
+      if(response.status===200){
+        setUser(null);
+        navigate('/')
+        console.log("log out successfully");
       }
-    } catch (err) {
-      console.error('Error:', err);
+    }catch(error){
+      console.error("error logging out",error)
     }
-  };
-
+  }
   return (
-    <UserContext.Provider value={{ isLoggedIn, login, logout, userInfo }}>
+    <UserContext.Provider value ={{user,login,logout}}>
       {children}
     </UserContext.Provider>
-  );
-};
+    
+  )
+}
 
-export default UserProvider;

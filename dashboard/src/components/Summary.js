@@ -2,9 +2,9 @@ import React, { useContext } from "react";
 import { UserContext } from './UserContext'; // Adjust the path as needed
 
 const Summary = () => {
-  const { userInfo } = useContext(UserContext); // Access user info from context
-  console.log(userInfo)
-  const username = userInfo?.username || 'User'; // Use user info from context
+  const  {user}  = useContext(UserContext); // Access user info from context
+  // console.log(userInfo)
+  const username = user?.username || 'User'; // Use user info from context
 
   return (
     <>
