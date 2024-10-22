@@ -8,13 +8,12 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
   const { closeBuyWindow } = useContext(GeneralContext);
 
   const handleBuyClick = () => {
-    // console.log("stock Name being sent",stockName)
     axios.post("http://localhost:3002/newOrder", {
-      name: stockName, // Changed from uid to stockName for clarity
+      name: stockName, 
       qty: stockQuantity,
       price: stockPrice,
       mode: "BUY",
-      userId: uid, // Include userId here
+      userId: uid,
      
     });
 
@@ -27,7 +26,7 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
 
   return (
     <div className="container" id="buy-window" draggable="true">
-      <h2>Buying {stockName}</h2> {/* Displaying the stock name */}
+      <h2>Buying {stockName}</h2> 
       <div className="regular-order">
         <div className="inputs">
           <fieldset>

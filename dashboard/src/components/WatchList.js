@@ -106,6 +106,9 @@ const WatchListActions = ({ uid, stockPrice,stockName }) => {
     // console.log("Opening buy window for:", stockName);
     generalContext.openBuyWindow(stockName, stockPrice, uid); // Pass both uid (now stock ID) and stockPrice
   };
+  const handleSellClick=()=>{
+    generalContext.openSellWindow(stockName,stockPrice,uid);
+  }
 
   return (
     <span className="actions">
@@ -124,6 +127,7 @@ const WatchListActions = ({ uid, stockPrice,stockName }) => {
           placement="top"
           arrow
           TransitionComponent={Grow}
+          onClick={handleSellClick}
         >
           <button className="sell">Sell</button>
         </Tooltip>

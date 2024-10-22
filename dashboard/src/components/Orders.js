@@ -10,8 +10,12 @@ const Orders = ({ userId }) => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(`http://localhost:3002/allorders`);
-        // console.log("Fetched orders:", response.data);
-        setOrders(response.data);
+        const fetchedOrders = response.data;
+
+        // Apply filtering logic to remove orders where both BUY and SELL exist for the same stock
+        const filteredOrders = removeMatchingBuyAndSellOrders(fetchedOrders);
+
+        setOrders(filteredOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {
@@ -22,6 +26,32 @@ const Orders = ({ userId }) => {
     fetchOrders();
   }, [userId]);
 
+  // Function to remove stocks with both BUY and SELL orders
+  const removeMatchingBuyAndSellOrders = (orders) => {
+    const stockGroups = orders.reduce((acc, order) => {
+      if (!acc[order.name]) {
+        acc[order.name] = [];
+      }
+      acc[order.name].push(order);
+      return acc;
+    }, {});
+
+    const filteredOrders = [];
+
+    // Loop through each stock group and filter out matching BUY and SELL pairs
+    Object.keys(stockGroups).forEach(stockName => {
+      const stockOrders = stockGroups[stockName];
+      const hasBuyOrder = stockOrders.some(order => order.mode === 'BUY');
+      const hasSellOrder = stockOrders.some(order => order.mode === 'SELL');
+
+      // Only add the stock if it doesn't have both BUY and SELL orders
+      if (!(hasBuyOrder && hasSellOrder)) {
+        filteredOrders.push(...stockOrders);
+      }
+    });
+
+    return filteredOrders;
+  };
 
   return (
     <div className="orders">
@@ -36,32 +66,34 @@ const Orders = ({ userId }) => {
         </div>
       ) : (
         <>
-       
-        <h3 className="title">Orders ({orders.length})</h3>
+          <h3 className="title">Orders ({orders.length})</h3>
 
-      <div className="order-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Stock</th>
-              <th>Quantity</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index}>
-                <td>{order.name}</td>
-                <td>{order.qty}</td>
-                <td>₹{order.price.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      </>
+          <div className="order-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Stock</th>
+                  <th>Mode</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order, index) => (
+                  <tr key={index}>
+                    <td>{order.name} </td>
+                    <td>{order.mode}</td>
+                    <td>{order.qty}</td>
+                    <td>₹{order.price.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );
 };
+
 export default Orders;

@@ -7,7 +7,8 @@ const passport=require("passport")
 const LocalStrategy= require("passport-local")
 const session=require('express-session')
 const User=require('./model/userModel')
-
+// const { auth } = require('express-openid-connect');
+// const { requiresAuth } = require('express-openid-connect');
 
 const { HoldingsModel } = require('./model/HoldingsModel');
 const { OrdersModel } = require('./model/OrdersModel');
@@ -30,14 +31,17 @@ const sessionOptions={
         expires:Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly:true,
-        sameSite:'lax'
+        sameSite:'lax',
+        secure:false,
     }
 }
 
 app.use(session(sessionOptions))
 app.use(passport.initialize())
-app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
+app.use(passport.session())
+
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id); // Here you save the user ID in the session
@@ -51,10 +55,30 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// const config = {
+//   authRequired: false,
+//   auth0Logout: true,
+//   secret: 'a long, randomly-generated string stored in env',
+//   baseURL: 'http://localhost:3000',
+//   clientID: 'IoXqLZFvPyHgPcbU4iNdBptz9QraYLt9',
+//   issuerBaseURL: 'https://dev-a5b3ioc2bbcsnbu6.us.auth0.com'
+// };
+// app.use(auth(config));
+
 // Connect to MongoDB
 mongoose.connect(url)
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Problem in connecting to the Database", err));
+
+
+  // app.get('/', (req, res) => {
+  //   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+  // });
+
+
+// app.get('/profile', requiresAuth(), (req, res) => {
+//   res.send(JSON.stringify(req.oidc.user));
+// });
 
 
   app.post("/signup", async (req, res) => {
@@ -88,7 +112,8 @@ mongoose.connect(url)
     }
   });
   
-
+ 
+  
   app.post("/login", (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
@@ -103,12 +128,27 @@ mongoose.connect(url)
           console.error('Login failed:', err);
           return res.status(500).json({ message: 'Login failed' });
         }
+        console.log(req.user.username)
         // Send a successful login response
         return res.status(200).json({ message: 'Login successful', user: user });
       });
     })(req, res, next);
   });
-  
+  app.get('/login',(req,res)=>{
+    try{
+      // console.log("Authenticated user:",req.user)
+      if(!req.isAuthenticated()){
+        return res.status(500).json({message:"User is not logged in"})
+      }else{
+        const user=req.user;  
+        res.status(200).json({message:"user is logged in",user:user})
+      }
+    }catch(error){
+      console.error(error)
+    }
+
+  })
+ 
 
 
 app.get("/logout",(req,res,next)=>{
@@ -116,20 +156,21 @@ app.get("/logout",(req,res,next)=>{
     if(err){
       return next(err)
     }
-    req.session.destroy();
-    res.status(200).json({ message: 'Logged out successfully' });
+    req.session.destroy(()=>{
+      res.clearCookie('connect.sid');
+      res.status(200).json({ message: 'Logged out successfully' });
+    });
   })
-
 })
 
 
 app.get('/api/user', (req, res) => {
-  // console.log("User from session:", req.user); 
-  if (req.isAuthenticated()) {
-    return res.status(200).json(req.user);
-  } else {
-      res.status(401).json({ message: 'Unauthorized' });
-  }
+  console.log("User from session:", req.user); 
+  // if (req.isAuthenticated()) {
+  //   return res.status(200).json(req.user);
+  // } else {
+  //     res.status(401).json({ message: 'Unauthorized' });
+  // }
 });
 
 app.get('/currentUser', (req, res) => {
@@ -194,6 +235,24 @@ app.get("/allorders", async (req, res) => {
     res.json(allOrders);
   } catch (err) {
     res.status(500).send("Error fetching holdings");
+  }
+});
+
+app.get("/sellstock", async (req, res) => {
+  try {
+    // Fetch all buy orders
+    let BuyOrders = await OrdersModel.find({ mode: 'BUY' });
+
+    // Check if there are no buy orders
+    if (!BuyOrders || BuyOrders.length === 0) {
+      return res.status(404).json({ message: 'No buy orders found' });
+    }
+
+    // Return the found buy orders
+    return res.status(200).json(BuyOrders);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Server error' }); // Send a server error response
   }
 });
 

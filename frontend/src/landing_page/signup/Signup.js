@@ -26,6 +26,16 @@ function Signup() {
             alert(result.message); 
         }
     }
+    let  onLogin= async()=>{
+        const dashboard=window.location.href="http://localhost:3000";
+        if(dashboard){
+            console.log("redirected to dashboard")
+        }
+        else{
+            console.log("problem in redirecting")
+        }
+        
+    }
     return ( 
         <div className=' container'>
             <div className='row '>
@@ -35,7 +45,8 @@ function Signup() {
                 <div className='col-1'></div>
                 <div className='col-4  m-5 '>
                     <h2 className='text-muted'>Signup now</h2>   
-                    <form className=" border border-3 rounded p-5 d-flex flex-column" style={{width:"23rem"}} onSubmit={handleSubmit(onSubmitHandler)} >
+                    <div className='border border-3 rounded mx-auto'>
+                    <form className="  p-5 d-flex flex-column" style={{width:"23rem"}} onSubmit={handleSubmit(onSubmitHandler)} >
                     <label htmlFor="email" className="text-start ps-2">Email</label>
                     <input className="m-2 p-1 rounded" type="email" id="email" placeholder="Email" {...register("email")} ></input>
                     <label htmlFor="username" className="text-start ps-2">Username</label>
@@ -43,8 +54,9 @@ function Signup() {
                     <label htmlFor="password" className="text-start ps-2">Password</label>
                     <input className="m-2 p-1 rounded " type="password" placeholder="Enter password" id="password" {...register("password")}></input>
                     <button className='btn btn-primary ms-5 mt-5' style={{width:"10rem"}} type="submit">Sign Up</button>
-                    <p className='ms-4 ps-4 mt-3'>Already registered? <Link to='/login' style={{ textDecoration: 'none' }} >Login</Link></p>
                     </form>
+                    <p className=' ps-4 ' style={{marginLeft:"70px"}}>Already registered?<button onClick={onLogin} className=' text-primary border-0 bg-transparent  '>Login</button></p>
+                    </div>
                    
                 </div>
             </div>

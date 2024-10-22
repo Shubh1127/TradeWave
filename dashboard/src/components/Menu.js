@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
 const Menu = () => {
+ ;
  const {user,logout}=useContext(UserContext)
  
   const [selectedMenu, setSelectedMenu] = useState(0);

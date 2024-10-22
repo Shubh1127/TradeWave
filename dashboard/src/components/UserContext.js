@@ -1,4 +1,4 @@
-import React, { useState,createContext } from 'react'
+import React, { useState,createContext, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
@@ -6,8 +6,32 @@ export const UserContext=createContext();
 
 export const  UserProvider = ({children}) => {
   let [user,setUser]=useState(null);
+  
  
   const navigate=useNavigate()
+
+    useEffect(()=>{
+      const fetchUser=async()=>{
+        try{
+          const response=await axios.get("http://localhost:3002/login",{
+            withCredentials:true,
+          });
+          if(response.status===200 && response.data.user){
+            setUser(response.data.user)
+          }else{
+            setUser(null)
+          }
+        }catch(err){
+          console.error("error",err)
+          setUser(null)
+        }
+      }
+      fetchUser();
+    },[])
+
+
+
+
  
    const login =async (data)=>{
     try{
@@ -18,7 +42,6 @@ export const  UserProvider = ({children}) => {
         console.log(user)
         
       }
-     
         return {ok:true,user:response.data.user};
       
     }catch(error){
