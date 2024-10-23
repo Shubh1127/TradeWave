@@ -13,12 +13,12 @@ export const GeneralContextProvider = (props) => {
   const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
   const [isSellWindowOpen, setIsSellWindowOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState({ name: "", price: 0 });
-  const [userId, setUserId] = useState(""); // State to store userId
+  const [userId, setUserId] = useState(""); 
 
   const handleOpenBuyWindow = (name, price, uid) => {
     setIsBuyWindowOpen(true);
     setSelectedStock({ name, price });
-    setUserId(uid); // Set userId when opening the buy window
+    setUserId(uid); 
   };
   
   const handleOpenSellWindow = (name, price, uid) => {
@@ -58,7 +58,7 @@ export const GeneralContextProvider = (props) => {
       )}
       {isSellWindowOpen && (
         <SellActionWindow 
-          uid={userId} 
+          uid={userId}
           stockPrice={selectedStock.price} 
           stockName={selectedStock.name} 
         />

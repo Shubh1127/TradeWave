@@ -136,17 +136,17 @@ mongoose.connect(url)
   });
   app.get('/login',(req,res)=>{
     try{
-      // console.log("Authenticated user:",req.user)
       if(!req.isAuthenticated()){
         return res.status(500).json({message:"User is not logged in"})
       }else{
         const user=req.user;  
         res.status(200).json({message:"user is logged in",user:user})
+        console.log("Authenticated user:",req.body)
       }
     }catch(error){
       console.error(error)
     }
-
+    
   })
  
 

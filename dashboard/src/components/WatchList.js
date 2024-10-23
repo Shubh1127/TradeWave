@@ -10,9 +10,9 @@ import {
 } from "@mui/icons-material";
 import { watchlist } from "../data/data";
 import { DoughnutChart } from "./DoughnoutChart";
+import { UserContext } from "./UserContext";
 
 const labels = watchlist.map((subArray) => subArray["name"]);
-
 const WatchList = () => {
   const data = {
     labels,
@@ -40,7 +40,9 @@ const WatchList = () => {
       },
     ],
   };
-
+  const user = useContext(UserContext)
+  console.log("watchlist recieve user: ",user)
+  
   return (
     <div className="watchlist-container">
       <div className="search-container">
@@ -93,7 +95,7 @@ const WatchListItem = ({ stock }) => {
         </div>
       </div>
       {showWatchlistActions && (
-        <WatchListActions uid={stock.id} stockPrice={stock.price} stockName={stock.name} /> // Pass the stock ID here
+        <WatchListActions uid={stock.id} stockPrice={stock.price} stockName={stock.name} /> 
       )}
     </li>
   );
