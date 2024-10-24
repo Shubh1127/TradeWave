@@ -2,10 +2,13 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext"; 
 import "./BuyActionWindow.css";
+import { UserContext } from "./UserContext";
 
 const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
   const { closeBuyWindow } = useContext(GeneralContext);
+  // const {user} =useContext(UserContext)
+  // console.log("buy window user:",user)
 
   const handleBuyClick = () => {
     axios.post("http://localhost:3002/newOrder", {

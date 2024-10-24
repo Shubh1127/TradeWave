@@ -21,7 +21,7 @@ export default function Login() {
       }else{
         console.log("failed to logged in")
       }
-      console.log(data)
+      // console.log(data)
   }
 
   

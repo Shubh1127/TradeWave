@@ -22,7 +22,6 @@ const Orders = ({ userId }) => {
         setLoading(false); // Set loading to false after fetching
       }
     };
-
     fetchOrders();
   }, [userId]);
 

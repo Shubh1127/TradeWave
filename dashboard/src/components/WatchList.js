@@ -41,7 +41,7 @@ const WatchList = () => {
     ],
   };
   const user = useContext(UserContext)
-  console.log("watchlist recieve user: ",user)
+  // console.log("watchlist recieve user: ",user)
   
   return (
     <div className="watchlist-container">

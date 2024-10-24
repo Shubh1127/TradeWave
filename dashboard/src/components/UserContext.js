@@ -1,4 +1,4 @@
-import React, { useState,createContext, useEffect } from 'react'
+import React, { useState,createContext,useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 
@@ -6,9 +6,7 @@ export const UserContext=createContext();
 
 export const  UserProvider = ({children}) => {
   let [user,setUser]=useState(null);
-  let [isLoggedin,setisLoggedIN]=useState(false);
-  
-  console.log(user)
+  // console.log("before login",user)
  
   const navigate=useNavigate()
 
@@ -31,7 +29,13 @@ export const  UserProvider = ({children}) => {
     // },[])
 
 
-
+    useEffect(() => {
+      // Retrieve user info from local storage on component mount
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser) {
+        setUser(storedUser);
+      }
+    }, []);
 
  
    const login =async (data)=>{
@@ -40,6 +44,7 @@ export const  UserProvider = ({children}) => {
       const response= await axios.post("http://localhost:3002/login",data);
       if(response.data.user){
         setUser(response.data.user);
+        localStorage.setItem('user',JSON.stringify(response.data.user))
         console.log(user)
         
       }

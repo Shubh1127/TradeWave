@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { UserContext, UserProvider } from "./UserContext";
+import { UserContext } from "./UserContext";
 import Menu from "./Menu";
 
 const TopBar = () => {
-  const user = useContext(UserContext);
-  const logout = useContext(UserContext)
+  const {user,logout} = useContext(UserContext);
   return (
     <div className="topbar-container">
       <div className="indices-container">
@@ -20,9 +19,9 @@ const TopBar = () => {
         </div>
       </div>
 
-      <UserContext.Provider value ={{user,logout}}>
-        <Menu />
-      </UserContext.Provider>
+      
+        <Menu user={user} logout={logout}/>
+      
     </div>
   );
 };

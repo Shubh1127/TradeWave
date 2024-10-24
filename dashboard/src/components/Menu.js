@@ -4,7 +4,7 @@ import { UserContext } from "./UserContext";
 
 
 const Menu = () => {
-  const { user } = useContext(UserContext);
+  const { user,logout } = useContext(UserContext);
   const [selectedMenu, setSelectedMenu] = useState(0);
 
   const handleMenuClick = (index) => {
@@ -12,7 +12,7 @@ const Menu = () => {
   };
 
   const users = useContext(UserContext);
-  console.log("menu recieves users:", users);
+  // console.log("menu recieves users:", users);
 
   const menuClass = "menu";
   const activeMenuClass = "menu selected";
@@ -81,9 +81,8 @@ const Menu = () => {
           </ul>
           <div className="profile">
             {user ? (
-              <Link to="/logout">
-              <button className="btn btn-primary rounded-1 p-1">Logout</button>
-            </Link>
+              <button className="btn btn-primary rounded-1 p-1" onClick={logout}>Logout</button>
+          
               
             ) : (
               <Link to="/login">
