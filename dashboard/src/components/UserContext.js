@@ -6,7 +6,8 @@ export const UserContext=createContext();
 
 export const  UserProvider = ({children}) => {
   let [user,setUser]=useState(null);
-  let [Message,setMessage]=useState("")
+  const [usernameError, setUsernameError] = useState(''); // State for username error messages
+  const [passwordError, setPasswordError] = useState('');
   // console.log("before login",user)
  
   const navigate=useNavigate()
@@ -29,27 +30,24 @@ export const  UserProvider = ({children}) => {
       const response= await axios.post("http://localhost:3002/login",data);
       if(response.data.user){
         setUser(response.data.user);
-        localStorage.setItem('user',JSON.stringify(response.data.user))
-        setMessage("Login successful!");
-        console.log(user)
-        
+        localStorage.setItem('user',JSON.stringify(response.data.user)) 
+        setUsernameError(''); // Clear username error
+        setPasswordError('');
+        return { ok: true, user: response.data.user };
+      }else {
+        // Check specific messages and set appropriate error states
+        if (response.data.message==='Username does not match') {
+          setUsernameError(response.data.message);
+        } else if (response.data.message === 'Password not matched') {
+          setPasswordError(response.data.message);
+        }
+        return { success: false, message: response.data.message };
       }
-        return {ok:true,user:response.data.user,Message:"Login Successfull"};
-      
     }catch(error){
       console.error("login failed",error);
-      if(error.response){
-        if(error.response.status===404){
-          setMessage("Username does not match. Sign up")
-        }else if(error.response.status===401){
-          setMessage("Password not matched")
-        }else{
-          setMessage("An error occured.Please try again.")
-        }
-      }else{
-        setMessage("Network Error.Please try again later.")
-      }
-      return {sucess:false,error:error.response ? error.response.data:"Network error"}
+      const message = error.response ? error.response.data.message : "Network error";
+      setPasswordError(message);
+      return { success: false, message };
     }
   }
   const logout=async()=>{
@@ -59,14 +57,14 @@ export const  UserProvider = ({children}) => {
         setUser(null);
         navigate('/')
         console.log("log out successfully");
+        localStorage.removeItem('user'); 
       }
     }catch(error){
       console.error("error logging out",error)
-      setMessage("Error logging out. Please try again."); 
     }
   }
   return (
-    <UserContext.Provider value ={{user,login,logout}}>
+    <UserContext.Provider value ={{user,login,logout,usernameError, passwordError}}>
       {children}
     </UserContext.Provider>
     

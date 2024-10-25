@@ -121,7 +121,7 @@ mongoose.connect(url)
   
       // Check if user exists
       if (!user) {
-        return res.status(404).json({ message: 'Username does not match. Redirecting to signup.' });
+        return res.status(404).json({ message: 'Username does not match. Go to Sign up.' });
       }
   
       // Authenticate using Passport
