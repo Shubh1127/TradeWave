@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
 
   const { register, handleSubmit } = useForm();
-  const {login} =useContext(UserContext)
+  const {login,message} =useContext(UserContext)
   const navigate=useNavigate();
   
  
 
   const onSubmit= async(data)=>{
-
+    console.log(message)
       const response= await login(data)
       if(response.ok){
         console.log("logged in");
@@ -39,6 +39,7 @@ export default function Login() {
           <h2 className="ms-5">Welcome User!</h2>
           <form className="border border-3 rounded p-5 d-flex flex-column" style={{height:"50vh", width:"20rem"}} onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="username" className="text-start ps-2 fw-bold">Username</label>
+            {message && <p>{message}</p>}
             <input className="m-2 p-1 rounded" type="text" placeholder="username" id="username" {...register("username")} />
             <label htmlFor="password" className="text-start ps-2 fw-bold">Password</label>
             <input className="m-2 p-1 rounded" type="password" placeholder="Enter password" id="password" {...register("password")} />

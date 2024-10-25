@@ -6,6 +6,7 @@ export const UserContext=createContext();
 
 export const  UserProvider = ({children}) => {
   let [user,setUser]=useState(null);
+  let [Message,setMessage]=useState("")
   // console.log("before login",user)
  
   const navigate=useNavigate()
@@ -29,14 +30,25 @@ export const  UserProvider = ({children}) => {
       if(response.data.user){
         setUser(response.data.user);
         localStorage.setItem('user',JSON.stringify(response.data.user))
+        setMessage("Login successful!");
         console.log(user)
         
       }
-        return {ok:true,user:response.data.user};
+        return {ok:true,user:response.data.user,Message:"Login Successfull"};
       
     }catch(error){
       console.error("login failed",error);
-     
+      if(error.response){
+        if(error.response.status===404){
+          setMessage("Username does not match. Sign up")
+        }else if(error.response.status===401){
+          setMessage("Password not matched")
+        }else{
+          setMessage("An error occured.Please try again.")
+        }
+      }else{
+        setMessage("Network Error.Please try again later.")
+      }
       return {sucess:false,error:error.response ? error.response.data:"Network error"}
     }
   }
@@ -50,6 +62,7 @@ export const  UserProvider = ({children}) => {
       }
     }catch(error){
       console.error("error logging out",error)
+      setMessage("Error logging out. Please try again."); 
     }
   }
   return (

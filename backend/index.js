@@ -114,26 +114,44 @@ mongoose.connect(url)
   
  
   
-  app.post("/login", (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        console.error('Error during authentication:', err);
-        return res.status(500).json({ message: 'An error occurred during login' });
-      }
+  app.post("/login", async (req, res, next) => {
+    try {
+      // Find the user by username
+      const user = await User.findOne({ username: req.body.username });
+  
+      // Check if user exists
       if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        return res.status(404).json({ message: 'Username does not match. Redirecting to signup.' });
       }
-      req.logIn(user, (err) => {
+  
+      // Authenticate using Passport
+      passport.authenticate('local', (err, authenticatedUser, info) => {
         if (err) {
-          console.error('Login failed:', err);
-          return res.status(500).json({ message: 'Login failed' });
+          console.error('Error during authentication:', err);
+          return res.status(500).json({ message: 'An error occurred during login' });
         }
-        console.log(req.user.username)
-        // Send a successful login response
-        return res.status(200).json({ message: 'Login successful', user: user });
-      });
-    })(req, res, next);
+        if (!authenticatedUser) {
+          return res.status(401).json({ message: 'Password not matched' });
+        }
+  
+        // Log in the user
+        req.logIn(authenticatedUser, (err) => {
+          if (err) {
+            console.error('Login failed:', err);
+            return res.status(500).json({ message: 'Login failed' });
+          }
+  
+          // Send a successful login response
+          return res.status(200).json({ message: 'Login successful', user: authenticatedUser });
+        });
+      })(req, res, next);
+  
+    } catch (err) {
+      console.error("Error in login route:", err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
   });
+  
   app.get('/login',(req,res)=>{
     try{
       if(!req.isAuthenticated()){

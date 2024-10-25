@@ -5,14 +5,14 @@ import { UserContext } from "./UserContext";
 
 const Orders = ({ userId }) => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchOrders = async () => {
     if(user){
       const uid = user._id; 
-    
+      setLoading(true)
       try {
         const response = await axios.get(`http://localhost:3002/allorders?userId=${uid}`);
         const fetchedOrders = response.data;
