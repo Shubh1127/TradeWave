@@ -5,9 +5,10 @@ const passportLocalMongoose=require("passport-local-mongoose")
 const userSchema=new Schema({
     email:{
         type:String,
-        requied:true,
+        required:true,
         unique:true
-    }
+    },
+    orders:[{type:mongoose.Schema.types.objectId,ref:'Order'}]
 })
 
 userSchema.plugin(passportLocalMongoose)

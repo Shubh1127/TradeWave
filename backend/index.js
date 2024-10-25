@@ -164,29 +164,9 @@ app.get("/logout",(req,res,next)=>{
 })
 
 
-app.get('/api/user', (req, res) => {
-  console.log("User from session:", req.user); 
-  // if (req.isAuthenticated()) {
-  //   return res.status(200).json(req.user);
-  // } else {
-  //     res.status(401).json({ message: 'Unauthorized' });
-  // }
-});
 
-app.get('/currentUser', (req, res) => {
-  if (req.isAuthenticated()) {
-    // User is authenticated, return user info
-    console.log(req.user)
-    return res.json({
-      username: req.user.username, // Adjust based on your user model
-      email: req.user.email, // If you want to return more info
-      // Add any other user properties you want to expose
-    });
-  } else {
-    // User is not authenticated
-    return res.status(401).json({ message: 'User not authenticated' });
-  }
-});
+
+
 
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {
@@ -211,15 +191,29 @@ app.get("/allPositions", async (req, res) => {
 // New order route
 app.post("/newOrder", async (req, res) => {
   const { name, qty, price, mode, userId } = req.body;
+
+  // Validate input
   if (!name) {
     return res.status(400).send("Stock name is required");
   }
+  if (!userId) {
+    return res.status(400).send("User ID is required");
+  }
+
+  // Create a new order instance
   const newOrder = new OrdersModel({ name, qty, price, mode, userId });
 
   try {
+    // Save the new order to the database
     await newOrder.save();
-    res.send("Order saved!");
-    // console.log(newOrder)
+
+    // Optionally populate the user data for the response
+    const populatedOrder = await OrdersModel.findById(newOrder._id).populate('userId');
+
+    res.status(201).json({
+      message: "Order saved!",
+      order: populatedOrder // Send back the populated order data
+    });
   } catch (error) {
     console.error("Error saving order:", error);
     res.status(500).send("Error saving order");
@@ -229,32 +223,37 @@ app.post("/newOrder", async (req, res) => {
 
 
 
+
 app.get("/allorders", async (req, res) => {
   try {
-    let allOrders = await OrdersModel.find({});
+    // Fetch all orders and populate the userId field with user details
+    let allOrders = await OrdersModel.find({}).populate('userId');
+
+    // Return the orders with user data
     res.json(allOrders);
   } catch (err) {
-    res.status(500).send("Error fetching holdings");
+    console.error("Error fetching orders:", err);
+    res.status(500).send("Error fetching orders");
   }
 });
-
 app.get("/sellstock", async (req, res) => {
   try {
-    // Fetch all buy orders
-    let BuyOrders = await OrdersModel.find({ mode: 'BUY' });
+    // Fetch all buy orders and populate the userId field with user details
+    let BuyOrders = await OrdersModel.find({ mode: 'BUY' }).populate('userId');
 
     // Check if there are no buy orders
     if (!BuyOrders || BuyOrders.length === 0) {
       return res.status(404).json({ message: 'No buy orders found' });
     }
 
-    // Return the found buy orders
+    // Return the found buy orders with user details
     return res.status(200).json(BuyOrders);
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching buy orders:", err);
     return res.status(500).json({ message: 'Server error' }); // Send a server error response
   }
 });
+
 
 
 app.listen(port, () => {
