@@ -5,15 +5,25 @@ import UserContext from './UserContext'
 
 const YourComponent = () => {
   const { openBuyWindow, openSellWindow, userId } = useContext(GeneralContext);
+  const {user}=useContext(UserContext)
 
   const handleOpenBuyWindow = (stock) => {
-    openBuyWindow(stock.name, stock.price, userId); // Pass both stock name and price
+    if (user) {
+      openBuyWindow(stock.name, stock.price, user._id); // Pass user ID from UserContext
+    } else {
+      console.error("User not logged in");
+      // Handle user not logged in (e.g., show a notification or redirect to login)
+    } // Pass both stock name and price
   };
 
   const handleOpenSellWindow = (stock) => {
-    openSellWindow(stock.name, stock.price, userId); // Pass both stock name and price
+    if (user) {
+      openSellWindow(stock.name, stock.price, user._id); // Pass user ID from UserContext
+    } else {
+      console.error("User not logged in");
+      // Handle user not logged in (e.g., show a notification or redirect to login)
+    } // Pass both stock name and price
   };
-  const {user}=useContext(UserContext)
 
 
   return (

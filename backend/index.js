@@ -44,7 +44,7 @@ app.use(passport.session())
 
 
 passport.serializeUser((user, done) => {
-  done(null, user.id); // Here you save the user ID in the session
+  done(null, user._id); // Here you save the user ID in the session
 });
 passport.deserializeUser(async (id, done) => {
   try {
@@ -65,7 +65,7 @@ passport.deserializeUser(async (id, done) => {
 // };
 // app.use(auth(config));
 
-// Connect to MongoDB
+// Connect to MongoDBf
 mongoose.connect(url)
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Problem in connecting to the Database", err));
@@ -190,33 +190,29 @@ app.get("/allPositions", async (req, res) => {
 
 // New order route
 app.post("/newOrder", async (req, res) => {
-  const { name, qty, price, mode, userId } = req.body;
-
-  // Validate input
-  if (!name) {
-    return res.status(400).send("Stock name is required");
-  }
-  if (!userId) {
-    return res.status(400).send("User ID is required");
-  }
-
-  // Create a new order instance
-  const newOrder = new OrdersModel({ name, qty, price, mode, userId });
-
   try {
-    // Save the new order to the database
+    const { userId, name, qty, price, mode } = req.body;
+
+    // Create a new order
+    const newOrder = new OrdersModel({ userId, name, qty, price, mode });
     await newOrder.save();
 
-    // Optionally populate the user data for the response
-    const populatedOrder = await OrdersModel.findById(newOrder._id).populate('userId');
+    // Find the user and push the order ID to their orders array
+    const userUpdateResult = await User.findByIdAndUpdate(
+      userId,
+      { $push: { orders: newOrder._id } }, // Ensure this matches your user schema
+      { new: true, useFindAndModify: false } // This option returns the updated document
+    );
+
+    // console.log("User update result:", userUpdateResult); // Log to check the result
 
     res.status(201).json({
-      message: "Order saved!",
-      order: populatedOrder // Send back the populated order data
+      message: "Order placed successfully",
+      order: newOrder,
     });
   } catch (error) {
-    console.error("Error saving order:", error);
-    res.status(500).send("Error saving order");
+    console.error("Error placing order:", error);
+    res.status(500).json({ message: "Failed to place order", error });
   }
 });
 
@@ -225,9 +221,18 @@ app.post("/newOrder", async (req, res) => {
 
 
 app.get("/allorders", async (req, res) => {
+  const  userId  = req.query.userId;
+  // console.log(userId) // Extract userId from the query parameters
+
   try {
-    // Fetch all orders and populate the userId field with user details
-    let allOrders = await OrdersModel.find({}).populate('userId');
+    // If userId is provided, fetch orders specific to that user
+    let allOrders;
+    if (userId) {
+      allOrders = await OrdersModel.find({ userId }).populate('userId');
+    } else {
+      // Fetch all orders if no userId is provided (optional)
+      allOrders = await OrdersModel.find({}).populate('userId');
+    }
 
     // Return the orders with user data
     res.json(allOrders);
@@ -236,6 +241,7 @@ app.get("/allorders", async (req, res) => {
     res.status(500).send("Error fetching orders");
   }
 });
+
 app.get("/sellstock", async (req, res) => {
   try {
     // Fetch all buy orders and populate the userId field with user details

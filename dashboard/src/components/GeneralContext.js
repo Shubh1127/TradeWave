@@ -14,7 +14,7 @@ export const GeneralContextProvider = (props) => {
   const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
   const [isSellWindowOpen, setIsSellWindowOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState({ name: "", price: 0 });
-  const [userId, setUserId] = useState(""); 
+  
   const {user}=useContext(UserContext)
   console.log("general context user:",user)
 
@@ -22,7 +22,7 @@ export const GeneralContextProvider = (props) => {
         if(user){
         setIsBuyWindowOpen(true);
         setSelectedStock({ name, price });
-        setUserId(uid); 
+       
       }else{
         console.log("user not logged in")
       };
@@ -32,7 +32,6 @@ export const GeneralContextProvider = (props) => {
     if(user){
     setIsSellWindowOpen(true);
     setSelectedStock({ name, price });
-    setUserId(uid);
   }else{
     console.log("user not logged in")
   };
@@ -40,13 +39,13 @@ export const GeneralContextProvider = (props) => {
   const handleCloseBuyWindow = () => {
     setIsBuyWindowOpen(false);
     setSelectedStock({ name: "", price: 0 });
-    setUserId(""); // Reset userId when closing
+    
   };
 
   const handleCloseSellWindow = () => {
     setIsSellWindowOpen(false);
     setSelectedStock({ name: "", price: 0 });
-    setUserId("");
+  
   };
 
   return (
@@ -61,14 +60,14 @@ export const GeneralContextProvider = (props) => {
       {props.children}
       {isBuyWindowOpen && (
         <BuyActionWindow 
-          uid={userId} 
+          uid={user._id} 
           stockPrice={selectedStock.price} 
           stockName={selectedStock.name} 
         />
       )}
       {isSellWindowOpen && (
         <SellActionWindow 
-          uid={userId}
+          uid={user._id}
           stockPrice={selectedStock.price} 
           stockName={selectedStock.name} 
         />

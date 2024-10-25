@@ -1,15 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "./UserContext"; 
 
 const Orders = ({ userId }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
 
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchOrders = async () => {
+    if(user){
+      const uid = user._id; 
+    
       try {
-        const response = await axios.get(`http://localhost:3002/allorders`);
+        const response = await axios.get(`http://localhost:3002/allorders?userId=${uid}`);
         const fetchedOrders = response.data;
 
         // Apply filtering logic to remove orders where both BUY and SELL exist for the same stock
@@ -21,6 +26,7 @@ const Orders = ({ userId }) => {
       } finally {
         setLoading(false); // Set loading to false after fetching
       }
+    }
     };
     fetchOrders();
   }, [userId]);

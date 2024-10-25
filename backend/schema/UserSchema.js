@@ -8,7 +8,7 @@ const userSchema=new Schema({
         required:true,
         unique:true
     },
-    orders:[{type:mongoose.Schema.types.objectId,ref:'Order'}]
+    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
 })
 
 userSchema.plugin(passportLocalMongoose)

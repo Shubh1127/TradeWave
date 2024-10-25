@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext"; 
+import { UserContext } from "./UserContext";
 import "./BuyActionWindow.css";
 
 const SellActionWindow = ({ uid, stockPrice, stockName }) => {
@@ -8,12 +9,15 @@ const SellActionWindow = ({ uid, stockPrice, stockName }) => {
   const [userBuyOrders, setUserBuyOrders] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const { closeSellWindow } = useContext(GeneralContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     // Fetch user's buy orders when component mounts
     const fetchBuyOrders = async () => {
       try {
-        const response = await axios.get(`http://localhost:3002/sellstock`);
+        const response = await axios.get(`http://localhost:3002/sellstock`, {
+          params: { userId: user._id }, // Include user ID in the request
+        });
         setUserBuyOrders(response.data);
       } catch (error) {
         console.error("Error fetching buy orders:", error);
@@ -21,7 +25,7 @@ const SellActionWindow = ({ uid, stockPrice, stockName }) => {
     };
 
     fetchBuyOrders();
-  }, [uid]);
+  }, [user]);
 
   const handleSellClick = () => {
     // Check if the user has bought the selected stock
@@ -38,7 +42,7 @@ const SellActionWindow = ({ uid, stockPrice, stockName }) => {
       qty: stockQuantity,
       price: stockPrice,
       mode: "SELL", // Change mode to "SELL"
-      userId: uid,
+      userId: user._id,
     }).then(() => {
       closeSellWindow(); 
     }).catch(err => {
@@ -51,7 +55,7 @@ const SellActionWindow = ({ uid, stockPrice, stockName }) => {
   };
 
   return (
-    <div className="container" id="buy-window" draggable="true">
+    <div className="container" id="sell-window" draggable="true">
       <h2>Selling {stockName}</h2> 
       <div className="regular-order">
         <div className="inputs">
