@@ -8,6 +8,7 @@ const YourComponent = () => {
   const {user}=useContext(UserContext)
 
   const handleOpenBuyWindow = (stock) => {
+   
     if (user) {
       openBuyWindow(stock.name, stock.price, user._id); // Pass user ID from UserContext
     } else {
@@ -17,6 +18,7 @@ const YourComponent = () => {
   };
 
   const handleOpenSellWindow = (stock) => {
+   
     if (user) {
       openSellWindow(stock.name, stock.price, user._id); // Pass user ID from UserContext
     } else {

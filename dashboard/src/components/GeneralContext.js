@@ -14,6 +14,7 @@ export const GeneralContextProvider = (props) => {
   const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
   const [isSellWindowOpen, setIsSellWindowOpen] = useState(false);
   const [selectedStock, setSelectedStock] = useState({ name: "", price: 0 });
+  const [message, setMessage] = useState("");
   
   const {user}=useContext(UserContext)
   console.log("general context user:",user)
@@ -22,9 +23,11 @@ export const GeneralContextProvider = (props) => {
         if(user){
         setIsBuyWindowOpen(true);
         setSelectedStock({ name, price });
+        setMessage("")
        
       }else{
         console.log("user not logged in")
+        setMessage("Please login to buy stocks")
       };
     }
       
@@ -32,8 +35,11 @@ export const GeneralContextProvider = (props) => {
     if(user){
     setIsSellWindowOpen(true);
     setSelectedStock({ name, price });
+    setMessage("")
+  
   }else{
     console.log("user not logged in")
+    setMessage("Please login to sell stocks")
   };
   }
   const handleCloseBuyWindow = () => {
@@ -49,12 +55,12 @@ export const GeneralContextProvider = (props) => {
   };
 
   return (
-    <GeneralContext.Provider
-      value={{
+    <GeneralContext.Provider  value={{
         openBuyWindow: handleOpenBuyWindow,
         closeBuyWindow: handleCloseBuyWindow,
         openSellWindow: handleOpenSellWindow,
         closeSellWindow: handleCloseSellWindow,
+        message,setMessage,
       }}
     >
       {props.children}

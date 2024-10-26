@@ -1,13 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from './UserContext'; // Adjust the path as needed
+import GeneralContext from "./GeneralContext";
 
 const Summary = () => {
-  const  {user}  = useContext(UserContext); // Access user info from context
+  const  {user}  = useContext(UserContext); 
+ const {message}=useContext(GeneralContext)
+//  console.log(message)
+  // Access user info from context
   // console.log(userInfo)
   const username = user?.username || 'User'; // Use user info from context
 
   return (
     <>
+      {message && <p className="font-bold" style={{ color: 'red' ,font:'bold'}}>{message}</p>}
       <div className="username">
         <h6>Hi, {username}!</h6>
         <hr className="divider" />
