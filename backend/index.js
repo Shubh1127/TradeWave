@@ -7,6 +7,9 @@ const passport=require("passport")
 const LocalStrategy= require("passport-local")
 const session=require('express-session')
 const User=require('./model/userModel')
+const request = require('request');
+const fs = require('fs');
+
 // const { auth } = require('express-openid-connect');
 // const { requiresAuth } = require('express-openid-connect');
 
@@ -81,6 +84,7 @@ mongoose.connect(url)
 // });
 
 
+
   app.post("/signup", async (req, res) => {
     const { username, email, password } = req.body;
   
@@ -151,7 +155,62 @@ mongoose.connect(url)
       return res.status(500).json({ message: 'Internal server error' });
     }
   });
-  
+
+// List of company symbols
+// const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
+
+
+
+// Alpha Vantage API Key
+// const apiKey = '96N5JXRHWGR7MWOV';
+
+let apiUsage = 0;
+// List of company symbols
+const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
+
+async function fetchAndSaveData() {
+    try {
+        const stockData = [];
+
+        for (const symbol of companies) {
+          if (apiUsage >= 500) {
+            return res.status(429).json({ message: 'Daily API limit reached!' });
+        }
+            await new Promise((resolve, reject) => {
+                const apiUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`;
+
+                request.get({ url: apiUrl, json: true }, (err, response, data) => {
+                    if (err) {
+                        console.error(`Error fetching data for ${symbol}:`, err);
+                        reject(err);
+                    } else if (response.statusCode !== 200) {
+                        console.error(`API error for ${symbol}:`, response.statusCode);
+                        reject(new Error('API error'));
+                    } else {
+                        stockData.push({ symbol, data });
+                        resolve();
+                    }
+                });
+            });
+        }
+
+        // Write data to data.js
+        const formattedData = `const stockData = ${JSON.stringify(stockData, null, 2)};\n\nmodule.exports = stockData;`;
+
+        fs.writeFile('../dashboard/src/data/data.js', formattedData, (err) => {
+            if (err) {
+                console.error('Error writing to data.js:', err);
+            } else {
+                console.log('Data successfully saved to data.js');
+            }
+        });
+    } catch (err) {
+        console.error('Failed to fetch or save data:', err);
+    }
+}
+
+fetchAndSaveData();
+
   app.get('/login',(req,res)=>{
     try{
       if(!req.isAuthenticated()){
@@ -243,15 +302,42 @@ app.get("/allorders", async (req, res) => {
   // console.log(userId) // Extract userId from the query parameters
 
   try {
-    // If userId is provided, fetch orders specific to that user
+    // const ordersWithBothMode=await OrdersModel.aggregate([
+    //   {
+    //     $group:{
+    //       _id:{userId:"$userId",name:"$name"},
+    //       modes:{$addToSet:"$mode"},
+    //       orders:{$push:"$$ROOT"}
+    //     },
+    //   },
+    //   {
+    //     $match:{
+    //       modes:{$all:["BUY","SELL"]},
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       userId: "$_id.userId",
+    //       name: "$_id.name",
+    //     },
+    //   },
+    // ])
+    // const deletionCriteria=ordersWithBothMode.map((order)=>({
+    //   userId:order.userId,
+    //   name:order.name,
+    // }))
+    // let deletedOrder=await OrdersModel.deleteMany({
+    //   $or:deletionCriteria,
+    // })
     let allOrders;
-    if (userId) {
-      allOrders = await OrdersModel.find({ userId }).populate('userId');
-    } else {
-      // Fetch all orders if no userId is provided (optional)
-      allOrders = await OrdersModel.find({}).populate('userId');
-    }
-
+      // If userId is provided, fetch orders specific to that user
+      if (userId) {
+        allOrders = await OrdersModel.find({ userId }).populate('userId');
+      } else {
+        // Fetch all orders if no userId is provided (optional)
+        allOrders = await OrdersModel.find({}).populate('userId');
+      }
     // Return the orders with user data
     res.json(allOrders);
   } catch (err) {
@@ -277,9 +363,6 @@ app.get("/sellstock", async (req, res) => {
     return res.status(500).json({ message: 'Server error' }); // Send a server error response
   }
 });
-
-
-
 app.listen(port, () => {
   console.log("Server started at port:", port);
 });

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { watchlist } from './data'; // Ensure you import your watchlist
 import GeneralContext from './GeneralContext';
 import UserContext from './UserContext'
@@ -6,6 +6,8 @@ import UserContext from './UserContext'
 const YourComponent = () => {
   const { openBuyWindow, openSellWindow, userId } = useContext(GeneralContext);
   const {user}=useContext(UserContext)
+  
+  // const []
 
   const handleOpenBuyWindow = (stock) => {
    

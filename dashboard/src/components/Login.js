@@ -35,7 +35,7 @@ export default function Login() {
             <label htmlFor="username" className="text-start ps-2 fw-bold">Username</label>
             {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
             <input className="m-2 p-1 rounded" type="text" placeholder="username" id="username" {...register("username")} />
-            {usernameError && <p className="error-message ms-2 font-bold">{usernameError}</p>}
+            {usernameError && <p className="error-message ms-2 fw-bold">{usernameError}</p>}
             <label htmlFor="password" className="text-start ps-2 fw-bold">Password</label>
             <input className="m-2 p-1 rounded" type="password" placeholder="Enter password" id="password" {...register("password")} />
             {passwordError && <p className="error-message ms-2  text-red">{passwordError}</p>}

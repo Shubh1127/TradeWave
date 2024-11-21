@@ -6,6 +6,7 @@ import { UserContext } from "./UserContext";
 
 const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
+  const [pricevalue,setPricevalue]=useState(stockPrice)
   const { closeBuyWindow } = useContext(GeneralContext);
   const {user} =useContext(UserContext)
   // console.log("buy window user:",user)
@@ -16,7 +17,7 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
     axios.post("http://localhost:3002/newOrder", {
       name: stockName, 
       qty: stockQuantity,
-      price: stockPrice,
+      price: pricevalue,
       mode: "BUY",
       userId: user._id,
      
@@ -28,6 +29,12 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
   const handleCancelClick = () => {
     closeBuyWindow(); 
   };
+  const handleQtyChange=(event)=>{
+    setStockQuantity(event.target.value);
+  }
+  const handlePriceChange=(event)=>{
+    setPricevalue(event.target.value);
+  }
 
   return (
     <div className="container" id="buy-window" draggable="true">
@@ -40,7 +47,7 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
               type="number"
               name="qty"
               id="qty"
-              onChange={(e) => setStockQuantity(e.target.value)}
+              onChange={handleQtyChange}
               value={stockQuantity}
             />
           </fieldset>
@@ -51,7 +58,8 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
               name="price"
               id="price"
               step="0.05"
-              value={stockPrice} // Use passed stock price
+              value={stockPrice*stockQuantity} // Use passed stock price
+              onChange={handlePriceChange}
               readOnly // Make price read-only as it is determined by the selected stock
             />
           </fieldset>
