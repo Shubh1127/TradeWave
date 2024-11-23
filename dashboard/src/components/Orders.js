@@ -89,7 +89,7 @@ const Orders = ({ userId }) => {
                     <td>{order.name} </td>
                     <td>{order.mode}</td>
                     <td>{order.qty}</td>
-                    <td>₹{order.price.toFixed(2)}</td>
+                    <td>₹{order.price}</td>
                   </tr>
                 ))}
               </tbody>
