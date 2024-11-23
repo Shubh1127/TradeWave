@@ -156,21 +156,15 @@ mongoose.connect(url)
     }
   });
 
-// List of company symbols
-// const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
 
-
-
-// Alpha Vantage API Key
-// const apiKey = '96N5JXRHWGR7MWOV';
 
 let apiUsage = 0;
 // List of company symbols
 const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
 
+const stockData = [];
 async function fetchAndSaveData() {
     try {
-        const stockData = [];
 
         for (const symbol of companies) {
           if (apiUsage >= 500) {
@@ -210,6 +204,9 @@ async function fetchAndSaveData() {
 }
 
 fetchAndSaveData();
+app.get('/api/stocks', (req, res) => {
+  res.json(stockData); // Send stock data as JSON
+});
 
   app.get('/login',(req,res)=>{
     try{
