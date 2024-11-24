@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 export const stockData = [
   {
     "symbol": "IBM",
@@ -7140,88 +7140,5 @@ export const stockData = [
       }
     }
   }
-];
-
-export const useFormattedData = () => {
-  const [formattedData, setFormattedData] = useState(null);
-
-  useEffect(() => {
-    const chartData = {
-      labels: [], // We will fill this with company symbols
-      datasets: [],
-    };
-
-    const colors = [
-      "rgba(75,192,192,0.4)", // IBM color
-      "rgba(255,99,132,0.4)", // AAPL color
-      "rgba(54,162,235,0.4)", // TSLA color (example)
-      "rgba(153,102,255,0.4)", // MSFT color (example)
-      "rgba(255,159,64,0.4)", // GOOG color (example)
-    ];
-
-    stockData.slice(0, 5).forEach((stock, index) => { // Limiting to 5 companies
-      const timeSeries = stock.data["Time Series (Daily)"];
-      const highPrices = [];
-      const lowPrices = [];
-
-      // Get high and low prices for the last 7 days
-      const dates = Object.keys(timeSeries).slice(0, 7); // Get last 7 days
-      dates.forEach((date) => {
-        highPrices.push(parseFloat(timeSeries[date]["2. high"]));
-        lowPrices.push(parseFloat(timeSeries[date]["3. low"]));
-      });
-
-      // Add company symbol as label
-      chartData.labels.push(stock.symbol);
-
-      // High prices dataset
-      chartData.datasets.push({
-        label: `${stock.symbol} - High Prices`,
-        data: highPrices.reverse(), // Reverse to get correct chronological order
-        backgroundColor: colors[index],
-        borderColor: colors[index],
-        borderWidth: 1,
-        fill: true,
-      });
-
-      // Low prices dataset
-      chartData.datasets.push({
-        label: `${stock.symbol} - Low Prices`,
-        data: lowPrices.reverse(),
-        backgroundColor: colors[index],
-        borderColor: colors[index],
-        borderWidth: 1,
-        fill: true,
-      });
-    });
-
-    setFormattedData(chartData); // Store the formatted data in the state
-  }, []);
-
-  return formattedData;
-};
-
-
-export const positions = [
-  {
-    product: "CNC",
-    name: "EVEREADY",
-    qty: 2,
-    avg: 316.27,
-    price: 312.35,
-    net: "+0.58%",
-    day: "-1.24%",
-    isLoss: true,
-  },
-  {
-    product: "CNC",
-    name: "JUBLFOOD",
-    qty: 1,
-    avg: 3124.75,
-    price: 3082.65,
-    net: "+10.04%",
-    day: "-1.35%",
-    isLoss: true,
-  },
 ];
 

@@ -1,73 +1,86 @@
-import React, { useContext, useState } from "react";
-import { UserContext } from './UserContext'; // Adjust the path as needed
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from './UserContext'; 
 import GeneralContext from "./GeneralContext";
+import { LineChart } from "./LineChart"; 
+import axios from "axios";
+
+
 
 const Summary = () => {
-  const  {user}  = useContext(UserContext); 
- const {message}=useContext(GeneralContext)
-//  console.log(message)
-  // Access user info from context
-  // console.log(userInfo)
-  const username = user?.username || 'User'; // Use user info from context
+  const { user } = useContext(UserContext);
+  const { message } = useContext(GeneralContext);
+  
+  const [stockData, setStockData] = useState([]);
+  const [lineChartData, setLineChartData] = useState(null);
+
+  const username = user?.username || 'User';
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3002/api/stocks");
+        setStockData(response.data);
+      } catch (error) {
+        console.error("Error fetching stock data:", error);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
+  useEffect(() => {
+    if (stockData.length === 0) return;
+
+    const formattedData = {
+      labels: [], 
+      datasets: [], 
+    };
+
+    const colors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"];
+
+    stockData.slice(0, 5).forEach((stock, index) => {
+      const timeSeries = stock.data["Time Series (Daily)"];
+      const dates = Object.keys(timeSeries).slice(0, 7).reverse(); 
+      const closingPrices = dates.map((date) =>
+        parseFloat(timeSeries[date]["4. close"])
+      );
+
+      if (index === 0) {
+        formattedData.labels = dates;
+      }
+
+      formattedData.datasets.push({
+        label: `${stock.symbol} - Closing Prices`,
+        data: closingPrices,
+        borderColor: colors[index],
+        backgroundColor: "rgba(0,0,0,0)",
+        borderWidth: 2,
+        tension: 0.2,
+      });
+    });
+
+    setLineChartData(formattedData); 
+  }, [stockData]);
 
   return (
-    <>
-      {message && <p className="font-bold" style={{ color: 'red' ,font:'bold'}}>{message}</p>}
-      <div className="username">
-        <h6>Hi, {username}!</h6>
-        <hr className="divider" />
-      </div>
+    
+      <div className="chart-container">
+        {message && <p className="font-bold" style={{ color: 'red' }}>{message}</p>}
 
-      <div className="section">
-        <span>
-          <p>Equity</p>
-        </span>
-
-        <div className="data">
-          <div className="first">
-            <h3>3.74k</h3>
-            <p>Margin available</p>
-          </div>
-          <hr />
-
-          <div className="second">
-            <p>
-              Margins used <span>0</span>{" "}
-            </p>
-            <p>
-              Opening balance <span>3.74k</span>{" "}
-            </p>
-          </div>
+        <div className="username">
+          <h6>Hi, {username}!</h6>
+          <hr className="divider" />
         </div>
-        <hr className="divider" />
-      </div>
 
-      <div className="section">
-        <span>
-          <p>Holdings (13)</p>
-        </span>
-
-        <div className="data">
-          <div className="first">
-            <h3 className="profit">
-              1.55k <small>+5.20%</small>{" "}
-            </h3>
-            <p>P&L</p>
-          </div>
-          <hr />
-
-          <div className="second">
-            <p>
-              Current Value <span>31.43k</span>{" "}
-            </p>
-            <p>
-              Investment <span>29.88k</span>{" "}
-            </p>
-          </div>
+        <div>
+          <h2>Stock Price Chart</h2>
+          {lineChartData ? (
+            <LineChart data={lineChartData} /> 
+          ) : (
+            <p>Loading chart...</p> 
+          )}
         </div>
-        <hr className="divider" />
-      </div>
-    </>
+    </div>
   );
 };
 

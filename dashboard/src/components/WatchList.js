@@ -5,11 +5,11 @@ import { DoughnutChart } from "./DoughnoutChart";
 import { Tooltip, Grow } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import GeneralContext from "./GeneralContext"; // Import your GeneralContext for using the buy/sell windows
-import {useFormattedData  } from '../data/data';
+import { useFormattedData } from "./useChart";
 // WatchList Component
 const WatchList = () => {
-  const chartData = useFormattedData();
   const [stockData, setStockData] = useState([]);
+  const doughnutChartData = useFormattedData(stockData);
 
   
   // Fetch stock data from backend API
@@ -43,14 +43,14 @@ const WatchList = () => {
             <WatchListItem stock={stock} key={index} />
           ))
         ) : (
-          <p>Loading stocks...</p> // Loading message if no data yet
+          <p>Loading stocks...</p> 
         )}
       </ul>
       <div className="watchlist-container">
       
       
-      {chartData ? (
-        <DoughnutChart data={chartData} /> // Pass the formatted data to DoughnutChart
+      {doughnutChartData ? (
+        <DoughnutChart data={doughnutChartData} />
       ) : (
         <p>Loading chart data...</p>
       )}
