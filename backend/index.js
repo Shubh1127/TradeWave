@@ -155,11 +155,6 @@ mongoose.connect(url)
       return res.status(500).json({ message: 'Internal server error' });
     }
   });
-
-
-
-let apiUsage = 0;
-// List of company symbols
 const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
 
 const stockData = [];
@@ -167,9 +162,6 @@ async function fetchAndSaveData() {
     try {
 
         for (const symbol of companies) {
-          if (apiUsage >= 500) {
-            return res.status(429).json({ message: 'Daily API limit reached!' });
-        }
             await new Promise((resolve, reject) => {
                 const apiUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`;
 
