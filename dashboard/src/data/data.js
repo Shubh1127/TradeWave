@@ -1,5 +1,4 @@
-
-export const stockData = [
+const stockData = [
   {
     "symbol": "IBM",
     "data": {
@@ -7142,3 +7141,4 @@ export const stockData = [
   }
 ];
 
+module.exports = stockData;
