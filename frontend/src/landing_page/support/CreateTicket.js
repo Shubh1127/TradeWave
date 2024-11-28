@@ -33,7 +33,7 @@ function CreateTicket() {
           </div>
         </div>
         <div className="col-3">
-          <h1 className="fs-3"><i class="fa-regular fa-user"></i>Your Zerodha Account</h1>
+          <h1 className="fs-3"><i class="fa-regular fa-user"></i>Your TradeWave Account</h1>
           <div className="col d-flex flex-column gap-1 lh-lg ">
             <a href="" className="text-decoration-none">
               Login Credentials

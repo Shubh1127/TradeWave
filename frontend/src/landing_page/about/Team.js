@@ -13,13 +13,13 @@ function Team() {
             style={{ borderRadius: "50%",width:"60%"}}
           />        
           <h5 className="mt-5 ms-5">Shubham Singh</h5>                    
-          <h6 className="ms-5">Founder,CEO</h6>                    
+          <h6 className="ms-5">CEO</h6>                    
         </div>
         <div className="col mt-4 p-5" style={{ color: "rgb(66,66,66)" }}>
           <p>
-            Nithin bootstrapped and founded Zerodha in 2010 to overcome the
+            Nithin bootstrapped and founded Tradwave in 2010 to overcome the
             hurdles he faced during his decade long stint as a trader. Today,
-            Zerodha has changed the landscape of the Indian broking industry.
+            Tradwave has changed the landscape of the Indian broking industry.
             <br></br>
             <br></br>
              He

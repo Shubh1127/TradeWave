@@ -28,12 +28,7 @@ function Signup() {
     }
     let  onLogin= async()=>{
         const dashboard=window.location.href="http://localhost:3000";
-        if(dashboard){
-            console.log("redirected to dashboard")
-        }
-        else{
-            console.log("problem in redirecting")
-        }
+       
         
     }
     return ( 
