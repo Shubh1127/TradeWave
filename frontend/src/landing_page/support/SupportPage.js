@@ -6,7 +6,7 @@ function Support() {
     return ( 
         <>
             <Hero/>
-            <CreateTicket/>
+            {/* <CreateTicket/> */}
         </>
      );
 }

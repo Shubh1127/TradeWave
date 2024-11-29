@@ -19,20 +19,8 @@ function Footer() {
           <a href="./pricing" className="text-decoration-none">
             Pricing
           </a>
-          <a href="" className="text-decoration-none">
-            Referral programme
-          </a>
-          <a href="" className="text-decoration-none">
+          <a href="./career" className="text-decoration-none">
             Careers
-          </a>
-          <a href="" className="text-decoration-none">
-            Tradwave.tech
-          </a>
-          <a href="" className="text-decoration-none">
-            Press & media
-          </a>
-          <a href="" className="text-decoration-none">
-            Tradwave Cares (CSR)
           </a>
         </div>
         <div className="col d-flex flex-column gap-1">
