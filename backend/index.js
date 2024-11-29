@@ -228,12 +228,6 @@ app.get("/logout",(req,res,next)=>{
     });
   })
 })
-
-
-
-
-
-
 // Fetch all holdings
 app.get("/allHoldings", async (req, res) => {
   try {
@@ -253,78 +247,147 @@ app.get("/allPositions", async (req, res) => {
     res.status(500).send("Error fetching positions");
   }
 });
+app.post("/buystock", async (req, res) => {
+  const { userId, name, qty, price } = req.body;
 
-// New order route
-app.post("/newOrder", async (req, res) => {
   try {
-    const { userId, name, qty, price, mode } = req.body;
+    // First, find the stock in the HoldingsModel
+    let holding = await HoldingsModel.findOne({ userId, name });
 
-    // Create a new order
-    const newOrder = new OrdersModel({ userId, name, qty, price, mode });
+    // If the stock exists, update the quantity and average price
+    if (holding) {
+      const totalCost = holding.avgPrice * holding.qty + price * qty; // Calculate the total cost of the current and new stocks
+      const newQty = holding.qty + qty; // Update the quantity
+      const newAvgPrice = totalCost / newQty; // Calculate the new average price
+
+      // Update the holding with new quantity, average price, and other fields
+      holding.qty = newQty;
+      holding.avgPrice = newAvgPrice; // Set the new average price
+      holding.netWorth = newAvgPrice * newQty; // Update net worth (quantity * average price)
+      holding.createdAt = new Date(); // Update createdAt if necessary (or keep the original one)
+      holding.updatedAt = new Date(); // Update updatedAt to the current time
+
+      await holding.save();
+    } else {
+      // If the stock doesn't exist in holdings, create a new entry
+      const newHolding = new HoldingsModel({
+        userId,
+        name,
+        qty,
+        avgPrice: price, // Set average price as the price for the first purchase
+        netWorth: price * qty, // Net worth (value of the stocks)
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      await newHolding.save();
+    }
+
+    // Record the order in the OrdersModel
+    const newOrder = new OrdersModel({
+      userId,
+      name,
+      qty,
+      price,
+      mode: "BUY",
+    });
+
     await newOrder.save();
 
-    // Find the user and push the order ID to their orders array
-    const userUpdateResult = await User.findByIdAndUpdate(
-      userId,
-      { $push: { orders: newOrder._id } }, // Ensure this matches your user schema
-      { new: true, useFindAndModify: false } // This option returns the updated document
-    );
-
-    // console.log("User update result:", userUpdateResult); // Log to check the result
-
-    res.status(201).json({
-      message: "Order placed successfully",
-      order: newOrder,
-    });
+    return res.status(200).json({ message: "Stock bought successfully!" });
   } catch (error) {
-    console.error("Error placing order:", error);
-    res.status(500).json({ message: "Failed to place order", error });
+    console.error("Error buying stock:", error);
+    return res.status(500).json({ message: "Failed to buy stock", error });
+  }
+});
+
+app.get("/holdings", async (req, res) => {
+  const userId = req.query.userId;
+
+  try {
+    const holdings = await HoldingsModel.find({ userId });
+    const holdingsWithCalculatedValues = holdings.map((holding) => {
+      const { name, qty, avgPrice, netWorth, day } = holding;
+      const currentPrice = avgPrice || 0;  
+      const currentValue = qty * currentPrice;  
+      const pnl = currentValue - (qty * avgPrice);
+      const netChange = currentValue - netWorth;
+      // console.log(name, qty, avgPrice, currentPrice, currentValue, pnl, netChange);
+      const dayChange = currentPrice - (day || currentPrice);  // Compare today's price with previous day's price
+      return {
+        name,
+        qty,
+        avgCost: avgPrice,  // Use the avg cost (avgPrice)
+        ltp: currentPrice,  // Use the avgPrice as LTP (Last Traded Price)
+        currentValue,
+        pnl,
+        netChange,
+        dayChange,
+      };
+    });
+
+    return res.status(200).json(holdingsWithCalculatedValues);
+  } catch (error) {
+    console.error("Error fetching holdings:", error);
+    return res.status(500).json({ message: "Failed to fetch holdings", error });
   }
 });
 
 
 
 
+app.post("/sellstock", async (req, res) => {
+  const { userId, name, qty, price } = req.body;
+
+  try {
+    const holding = await HoldingsModel.findOne({ userId, name });
+
+    if (!holding || holding.qty < qty) {
+      return res.status(400).json({
+        message: "Insufficient quantity to sell.",
+      });
+    }
+
+    // Create new sell order
+    const newOrder = new OrdersModel({
+      userId,
+      name,
+      qty,
+      price,
+      mode: "SELL",
+    });
+
+    await newOrder.save(); 
+
+    // Update the holding quantity
+    holding.qty -= qty;
+    holding.netWorth = holding.qty * holding.avgPrice;
+
+    if (holding.qty === 0) {
+      // Use deleteOne() instead of remove()
+      await holding.deleteOne();
+    } else {
+      await holding.save();
+    }
+
+    return res.status(200).json({
+      message: "Stock sold successfully",
+      order: newOrder,
+    });
+  } catch (error) {
+    console.error("Error selling stock:", error);
+    return res.status(500).json({ message: "Failed to sell stock", error });
+  }
+});
+
 
 app.get("/allorders", async (req, res) => {
   const  userId  = req.query.userId;
-  // console.log(userId) // Extract userId from the query parameters
-
   try {
-    // const ordersWithBothMode=await OrdersModel.aggregate([
-    //   {
-    //     $group:{
-    //       _id:{userId:"$userId",name:"$name"},
-    //       modes:{$addToSet:"$mode"},
-    //       orders:{$push:"$$ROOT"}
-    //     },
-    //   },
-    //   {
-    //     $match:{
-    //       modes:{$all:["BUY","SELL"]},
-    //     },
-    //   },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       userId: "$_id.userId",
-    //       name: "$_id.name",
-    //     },
-    //   },
-    // ])
-    // const deletionCriteria=ordersWithBothMode.map((order)=>({
-    //   userId:order.userId,
-    //   name:order.name,
-    // }))
-    // let deletedOrder=await OrdersModel.deleteMany({
-    //   $or:deletionCriteria,
-    // })
     let allOrders;
-      // If userId is provided, fetch orders specific to that user
       if (userId) {
         allOrders = await OrdersModel.find({ userId }).populate('userId');
       } else {
-        // Fetch all orders if no userId is provided (optional)
         allOrders = await OrdersModel.find({}).populate('userId');
       }
     // Return the orders with user data
@@ -337,19 +400,14 @@ app.get("/allorders", async (req, res) => {
 
 app.get("/sellstock", async (req, res) => {
   try {
-    // Fetch all buy orders and populate the userId field with user details
     let BuyOrders = await OrdersModel.find({ mode: 'BUY' }).populate('userId');
-
-    // Check if there are no buy orders
     if (!BuyOrders || BuyOrders.length === 0) {
       return res.status(404).json({ message: 'No buy orders found' });
     }
-
-    // Return the found buy orders with user details
     return res.status(200).json(BuyOrders);
   } catch (err) {
     console.error("Error fetching buy orders:", err);
-    return res.status(500).json({ message: 'Server error' }); // Send a server error response
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 app.listen(port, () => {
