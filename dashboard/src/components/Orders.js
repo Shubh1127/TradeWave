@@ -18,9 +18,9 @@ const Orders = ({ userId }) => {
         const fetchedOrders = response.data;
 
         // Apply filtering logic to remove orders where both BUY and SELL exist for the same stock
-        const filteredOrders = removeMatchingBuyAndSellOrders(fetchedOrders);
+        // const filteredOrders = removeMatchingBuyAndSellOrders(fetchedOrders);
 
-        setOrders(filteredOrders);
+        setOrders(fetchedOrders);
       } catch (error) {
         console.error("Error fetching orders:", error);
       } finally {
@@ -32,31 +32,31 @@ const Orders = ({ userId }) => {
   }, [userId]);
 
   // Function to remove stocks with both BUY and SELL orders
-  const removeMatchingBuyAndSellOrders = (orders) => {
-    const stockGroups = orders.reduce((acc, order) => {
-      if (!acc[order.name]) {
-        acc[order.name] = [];
-      }
-      acc[order.name].push(order);
-      return acc;
-    }, {});
+  // const removeMatchingBuyAndSellOrders = (orders) => {
+  //   const stockGroups = orders.reduce((acc, order) => {
+  //     if (!acc[order.name]) {
+  //       acc[order.name] = [];
+  //     }
+  //     acc[order.name].push(order);
+  //     return acc;
+  //   }, {});
 
-    const filteredOrders = [];
+  //   const filteredOrders = [];
 
-    // Loop through each stock group and filter out matching BUY and SELL pairs
-    Object.keys(stockGroups).forEach(stockName => {
-      const stockOrders = stockGroups[stockName];
-      const hasBuyOrder = stockOrders.some(order => order.mode === 'BUY');
-      const hasSellOrder = stockOrders.some(order => order.mode === 'SELL');
+  //   // Loop through each stock group and filter out matching BUY and SELL pairs
+  //   Object.keys(stockGroups).forEach(stockName => {
+  //     const stockOrders = stockGroups[stockName];
+  //     const hasBuyOrder = stockOrders.some(order => order.mode === 'BUY');
+  //     const hasSellOrder = stockOrders.some(order => order.mode === 'SELL');
 
-      // Only add the stock if it doesn't have both BUY and SELL orders
-      if (!(hasBuyOrder && hasSellOrder)) {
-        filteredOrders.push(...stockOrders);
-      }
-    });
+  //     // Only add the stock if it doesn't have both BUY and SELL orders
+  //     if (!(hasBuyOrder && hasSellOrder)) {
+  //       filteredOrders.push(...stockOrders);
+  //     }
+  //   });
 
-    return filteredOrders;
-  };
+  //   return filteredOrders;
+  // };
 
   return (
     <div className="orders">

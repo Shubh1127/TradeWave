@@ -15,10 +15,6 @@ import Footer from './landing_page/Footer';
 import ContactUs from './landing_page/Contact/ContactUs';
 import Carreer from './landing_page/Carreer';
 import NotFound from './landing_page/NotFound';
-
-
-
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter> 

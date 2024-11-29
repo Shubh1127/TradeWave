@@ -14,13 +14,11 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
 
   const handleBuyClick = () => {
 
-    axios.post("http://localhost:3002/newOrder", {
+    axios.post("http://localhost:3002/buystock", {
       name: stockName, 
       qty: stockQuantity,
       price: pricevalue,
-      mode: "BUY",
       userId: user._id,
-     
     });
 
     closeBuyWindow(); 
@@ -58,9 +56,9 @@ const BuyActionWindow = ({ uid, stockPrice, stockName }) => {
               name="price"
               id="price"
               step="0.05"
-              value={stockPrice*stockQuantity} // Use passed stock price
+              value={stockPrice*stockQuantity} 
               onChange={handlePriceChange}
-              readOnly // Make price read-only as it is determined by the selected stock
+              readOnly 
             />
           </fieldset>
         </div>

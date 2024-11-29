@@ -6,29 +6,31 @@ import { Tooltip, Grow } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import GeneralContext from "./GeneralContext"; // Import your GeneralContext for using the buy/sell windows
 import { useFormattedData } from "./useChart";
-// WatchList Component
+import Data from "../data/data"
 const WatchList = () => {
   const [stockData, setStockData] = useState([]);
   const doughnutChartData = useFormattedData(stockData);
-
+  useEffect(()=>{
+    setStockData(Data)
+  })
   
   // Fetch stock data from backend API
-  useEffect(() => {
-    const fetchData = async () => {
-      // Check if stockData is already populated to avoid re-fetching
-      if (stockData.length === 0) {
-        try {
-          const response = await axios.get("http://localhost:3002/api/stocks");
-          // console.log("API Data:", response.data);
-          setStockData(response.data);
-        } catch (error) {
-          console.error("Error fetching stock data:", error);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     // Check if stockData is already populated to avoid re-fetching
+  //     if (stockData.length === 0) {
+  //       try {
+  //         const response = await axios.get("http://localhost:3002/api/stocks");
+  //         // console.log("API Data:", response.data);
+  //         setStockData(response.data);
+  //       } catch (error) {
+  //         console.error("Error fetching stock data:", error);
+  //       }
+  //     }
+  //   };
   
-    fetchData();
-  }, [stockData]) // Empty dependency array ensures this runs only once after the component mounts
+  //   fetchData();
+  // }, [stockData])
   return (
     <div className="watchlist-container">
       <div className="search-container">

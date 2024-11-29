@@ -27,29 +27,24 @@ const SellActionWindow = ({ uid, stockPrice, stockName }) => {
     fetchBuyOrders();
   }, [user]);
 
-  const handleSellClick = () => {
-    // Check if the user has bought the selected stock
-    const stockInOrders = userBuyOrders.find(order => order.name === stockName);
-
-    if (!stockInOrders) {
-      setErrorMessage(`You do not own ${stockName} to sell.`);
-      return;
+  const handleSellClick = async () => {
+    try {
+      const response = await axios.post("http://localhost:3002/sellstock", {
+        name: stockName,
+        qty: stockQuantity,
+        price: stockPrice,
+        userId: user._id,
+      });
+  
+      closeSellWindow(); // Close window on success
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setErrorMessage(err.response.data.message);
+      } else {
+        console.error("Error selling stock:", err);
+      }
     }
-
-    // Proceed with selling if the stock is found
-    axios.post("http://localhost:3002/newOrder", {
-      name: stockName, 
-      qty: stockQuantity,
-      price: stockPrice,
-      mode: "SELL", // Change mode to "SELL"
-      userId: user._id,
-    }).then(() => {
-      closeSellWindow(); 
-    }).catch(err => {
-      console.error("Error selling stock:", err);
-    });
   };
-
   const handleCancelClick = () => {
     closeSellWindow(); 
   };

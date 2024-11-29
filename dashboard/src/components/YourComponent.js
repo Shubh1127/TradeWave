@@ -15,7 +15,6 @@ const YourComponent = () => {
       openBuyWindow(stock.name, stock.price, user._id); // Pass user ID from UserContext
     } else {
       console.error("User not logged in");
-      // Handle user not logged in (e.g., show a notification or redirect to login)
     } // Pass both stock name and price
   };
 

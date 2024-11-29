@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from './UserContext'; 
 import GeneralContext from "./GeneralContext";
 import { LineChart } from "./LineChart"; 
-import axios from "axios";
+// import axios from "axios";
+import Data from "../data/data"
 
 
 
@@ -15,18 +16,21 @@ const Summary = () => {
 
   const username = user?.username || 'User';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3002/api/stocks");
-        setStockData(response.data);
-      } catch (error) {
-        console.error("Error fetching stock data:", error);
-      }
-    };
+  useEffect(()=>{
+    setStockData(Data)
+  })
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3002/api/stocks");
+  //       setStockData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching stock data:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []); 
+  //   fetchData();
+  // }, []); 
 
   useEffect(() => {
     if (stockData.length === 0) return;
