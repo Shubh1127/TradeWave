@@ -16,6 +16,7 @@ const data = require('./data');
 // const { requiresAuth } = require('express-openid-connect');
 
 const { HoldingsModel } = require('./model/HoldingsModel');
+const {HoldingSchema}=require('./schema/HoldingSchema')
 const { OrdersModel } = require('./model/OrdersModel');
 const port = process.env.PORT || 3002;
 const url = process.env.MONGO_URL;
@@ -344,48 +345,33 @@ async function getPreviousClose(stockName) {
     return null; 
   }
 }
-async function getLatestClose(stockName) {
-  const stock = data.find(item => item.symbol === stockName);
 
-  if (stock) {
-    const dateList = Object.keys(stock.data['Time Series (Daily)']);
-    const LatestDate = dateList[0]; 
-
-    if (LatestDate) {
-      return parseFloat(stock.data['Time Series (Daily)'][LatestDate]['4. close']); 
-    } else {
-      console.log(`No Latest closing price found for stock ${stockName}`);
-      return null;
-    }
-  } else {
-    console.log(`Stock ${stockName} not found in data`);
-    return null; 
-  }
-}
 
 app.get("/holdings", async (req, res) => {
   const userId = req.query.userId;
 
   try {
+    // Update PNL before fetching holdings
+    await HoldingsModel.updatePNL();
+
     const holdings = await HoldingsModel.find({ userId });
     const holdingsWithCalculatedValues = await Promise.all(
       holdings.map(async (holding) => {
-        const { name, qty, avgPrice, Price, netChange } = holding;
+        const { name, qty, avgPrice, Price, netChange, PNL } = holding;
         const currentValue = qty * Price;
-        const pnl = currentValue - qty * avgPrice;
         const netChangePercentage =
           netChange !== undefined && Price !== 0
             ? ((netChange / (Price - netChange)) * 100).toFixed(2)
-            : "N/A"; 
+            : "N/A";
 
         return {
           name,
           qty,
-          avgCost: avgPrice, // Use the avg cost (avgPrice)
-          ltp: Price, // Use the avgPrice as LTP (Last Traded Price)
+          avgCost: avgPrice,
+          ltp: Price,
           currentValue,
-          pnl,
-          netChange:netChangePercentage,
+          pnl:PNL*qty,
+          netChange: netChangePercentage,
         };
       })
     );

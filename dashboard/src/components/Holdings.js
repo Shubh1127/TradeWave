@@ -17,6 +17,7 @@ const Holdings = () => {
         .then((res) => {
           console.log(res.data);
           setAllHoldings(res.data);
+         
         })
         .catch((error) => {
           console.error("Error fetching holdings:", error);
@@ -47,7 +48,11 @@ const Holdings = () => {
     (acc, stock) => acc + (stock.currentValue || 0),
     0
   );
-  const pnl = currentValue - totalInvestment;
+  let profit=allHoldings.map((stock)=>{
+    let {pnl}=stock;
+    return pnl;
+  })
+  const PNL =profit;
 
   return (
     <>
@@ -122,7 +127,7 @@ const Holdings = () => {
         <div className="col"></div>
         <div className="col">
           <h5>
-            {pnl.toFixed(2)} ({((pnl / totalInvestment) * 100).toFixed(2)}%)
+            {PNL} 
           </h5>
           <p>P&L</p>
         </div>
