@@ -17,7 +17,7 @@ const ContactUs = () => {
             <div className="col-3 ">
               <p>Support portal</p>
               <p>
-                Send use email <i class="fa-regular fa-hand-point-down"></i>
+                Send us email <i class="fa-regular fa-hand-point-down"></i>
               </p>
               <a href="mailto:example@example.com?subject=Inquiry&body=Hello">
                 Shubhamsinghmor2312@gmail.com
@@ -52,7 +52,7 @@ const ContactUs = () => {
           </div>
           <div className="col-3">
             <p>     <div className="ms-5 ps-5 mb-4">HQ</div>
-                Tradwave, #153/154,
+                Tradewave, #153/154,
                 4th Cross, J.P Nagar 4th Phase,
                 Opp. Clarence Public School,
                 Bengaluru - 560078</p>

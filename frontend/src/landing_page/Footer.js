@@ -6,7 +6,7 @@ function Footer() {
       <div className="row   mt-5 " style={{marginLeft:"130px"}} >
         <div className="col ">
           <h3 className="text-primary">Tradewave</h3>
-          <p>© 2010 - 2024, Tradwave Broking Ltd. All rights reserved.</p>
+          <p>© 2024 , Tradewave Broking Ltd. All rights reserved.</p>
         </div>
         <div className="col d-flex flex-column gap-1  ">
           <p>Company</p>
@@ -48,15 +48,13 @@ function Footer() {
       </div>
       <div className="container mt-5 text-muted fs-6 p-5" >
       <p>
-        Tradwave Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration
-        no.: INZ000031633 CDSL/NSDL: Depository services through Tradwave Broking
-        Ltd. – SEBI Registration no.: IN-DP-431-2019 Commodity Trading through
-        Tradwave Commodities Pvt. Ltd. MCX: 46025; NSE-50001 – SEBI Registration
-        no.: INZ000038238 Registered Address: Tradwave Broking Ltd., #153/154,
-        4th Cross, Dollars Colony, Opp. Clarence Public School, J.P Nagar 4th
-        Phase, Bengaluru - 560078, Karnataka, India. For any complaints
-        pertaining to securities broking please write to <span className="text-primary">complaints@Tradwave.com</span>,
-        for DP related to <span className="text-primary">dp@Tradwave.com</span>. Please ensure you carefully read the
+        Tradewave Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration
+        no.: IBM000015643 CDSL/NSDL: Depository services through Tradewave Broking
+        Ltd. – SEBI Registration no.: IN-DP-444-2019 Commodity Trading through
+        Tradewave Commodities Pvt. Ltd. MCX: 4927; NSE-50023 – SEBI Registration
+        no.: ITD000038321 . For any complaints
+        pertaining to securities broking please write to <span className="text-primary">complaints@Tradewave.com</span>,
+        for DP related to <span className="text-primary">dp@Tradewave.com</span>. Please ensure you carefully read the
         Risk Disclosure Document as prescribed by SEBI | ICF{" "}
       </p>
 
@@ -97,7 +95,7 @@ function Footer() {
         allotment. In case of non allotment the funds will remain in your bank
         account. As a business we don't give stock tips, and have not authorized
         anyone to trade on behalf of others. If you find anyone claiming to be
-        part of Tradwave and offering such services, please <span className="text-primary">create a ticket here</span>.
+        part of Tradewave and offering such services, please <span className="text-primary">create a ticket here</span>.
       </p>
       </div>
     </div>

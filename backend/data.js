@@ -4283,7 +4283,30 @@ const stockData = [
       }
     }
   },
-  
+  {
+    "symbol": "NFLX",
+    "data": {
+      "Information": "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits."
+    }
+  },
+  {
+    "symbol": "META",
+    "data": {
+      "Information": "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits."
+    }
+  },
+  {
+    "symbol": "NVDA",
+    "data": {
+      "Information": "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits."
+    }
+  },
+  {
+    "symbol": "JPM",
+    "data": {
+      "Information": "Thank you for using Alpha Vantage! Our standard API rate limit is 25 requests per day. Please subscribe to any of the premium plans at https://www.alphavantage.co/premium/ to instantly remove all daily rate limits."
+    }
+  }
 ];
 
 module.exports = stockData;

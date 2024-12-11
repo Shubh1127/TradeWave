@@ -64,7 +64,6 @@ const Holdings = () => {
               <th>Cur. val</th>
               <th>P&L</th>
               <th>Net chg.</th>
-              <th>Day chg.</th>
             </tr>
           </thead>
           <tbody>
@@ -77,7 +76,6 @@ const Holdings = () => {
                 currentValue,
                 pnl,
                 netChange,
-                dayChange,
               } = stock;
 
               // Ensure all properties are defined before calling toFixed()
@@ -85,14 +83,15 @@ const Holdings = () => {
               const formattedLtp = (ltp || 0).toFixed(2);
               const formattedCurrentValue = (currentValue || 0).toFixed(2);
               const formattedPnl = (pnl || 0).toFixed(2);
-              const formattedNetChange = (netChange || 0).toFixed(2);
-              const formattedDayChange = (dayChange || 0).toFixed(2);
+              const formattedNetChange = (netChange || 0);
 
               // Determine profit/loss class
               const isProfit =
                 formattedCurrentValue - formattedAvgCost * qty >= 0.0;
               const profClass = isProfit ? "profit" : "loss";
-              const dayClass = formattedDayChange >= 0 ? "profit" : "loss";
+
+              // Determine netChange class
+              const netChangeClass = netChange >= 0 ? "profit" : "loss";
 
               return (
                 <tr key={index}>
@@ -102,8 +101,7 @@ const Holdings = () => {
                   <td>{formattedLtp}</td>
                   <td>{formattedCurrentValue}</td>
                   <td className={profClass}>{formattedPnl}</td>
-                  <td className={profClass}>{formattedNetChange}</td>
-                  <td className={dayClass}>{formattedDayChange}</td>
+                  <td className={netChangeClass}>{formattedNetChange}%</td>
                 </tr>
               );
             })}
@@ -116,10 +114,12 @@ const Holdings = () => {
           <h5>{totalInvestment.toFixed(2)}</h5>
           <p>Total investment</p>
         </div>
+        <div className="col"></div>
         <div className="col">
           <h5>{currentValue.toFixed(2)}</h5>
           <p>Current value</p>
         </div>
+        <div className="col"></div>
         <div className="col">
           <h5>
             {pnl.toFixed(2)} ({((pnl / totalInvestment) * 100).toFixed(2)}%)

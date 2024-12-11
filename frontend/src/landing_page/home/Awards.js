@@ -10,7 +10,7 @@ function Awards() {
         <div className="col-6 p-5 mt-5 ">
           <h1>Largest stock broker in India</h1>
           <p>
-            2+ million Tradwave clients contribute to over 15% of all retail
+            2+ million Tradewave clients contribute to over 15% of all retail
             order volumes in india daily by trading and invasting in:
           </p>
           <div className="row">

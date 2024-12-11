@@ -10,6 +10,8 @@ const User=require('./model/userModel')
 const request = require('request');
 const fs = require('fs');
 
+const data = require('./data');
+
 // const { auth } = require('express-openid-connect');
 // const { requiresAuth } = require('express-openid-connect');
 
@@ -182,7 +184,13 @@ async function fetchAndSaveData() {
 
         // Write data to data.js
         const formattedData = `const stockData = ${JSON.stringify(stockData, null, 2)};\n\nmodule.exports = stockData;`;
-
+        fs.writeFile('./data.js', formattedData, (err) => {
+          if (err) {
+              console.error('Error writing to data.js:', err);
+          } else {
+              console.log('Data successfully saved to data.js');
+          }
+      });
         fs.writeFile('../dashboard/src/data/data.js', formattedData, (err) => {
             if (err) {
                 console.error('Error writing to data.js:', err);
@@ -195,7 +203,7 @@ async function fetchAndSaveData() {
     }
 }
 
-fetchAndSaveData();
+// fetchAndSaveData();
 app.get('/api/stocks', (req, res) => {
   res.json(stockData); // Send stock data as JSON
 });
@@ -251,31 +259,48 @@ app.post("/buystock", async (req, res) => {
   const { userId, name, qty, price } = req.body;
 
   try {
-    // First, find the stock in the HoldingsModel
+    // Ensure the quantity is treated as a number
+    const quantity = Number(qty);  // Convert qty to number if it's coming as a string
+
+    if (isNaN(quantity) || quantity <= 0) {
+      return res.status(400).json({ message: "Invalid quantity" });
+    }
+
+    // Fetch the previous day's closing price for the stock
+    const previousClose = await getPreviousClose(name);
+
+    if (previousClose === null) {
+      return res.status(400).json({ message: `Previous close data not found for ${name}` });
+    }
+
+    // Calculate netChange as LTP - previous close
+    const netChange = price - previousClose;
+
     let holding = await HoldingsModel.findOne({ userId, name });
 
-    // If the stock exists, update the quantity and average price
     if (holding) {
-      const totalCost = holding.avgPrice * holding.qty + price * qty; // Calculate the total cost of the current and new stocks
-      const newQty = holding.qty + qty; // Update the quantity
-      const newAvgPrice = totalCost / newQty; // Calculate the new average price
+      // If the stock already exists, update the details
+      const totalCost = (holding.avgPrice * holding.qty) + (price * quantity); 
+      const newQty = holding.qty + quantity; 
+      const newAvgPrice = totalCost / newQty; 
+      const newPrice = price;
 
-      // Update the holding with new quantity, average price, and other fields
       holding.qty = newQty;
-      holding.avgPrice = newAvgPrice; // Set the new average price
-      holding.netWorth = newAvgPrice * newQty; // Update net worth (quantity * average price)
-      holding.createdAt = new Date(); // Update createdAt if necessary (or keep the original one)
-      holding.updatedAt = new Date(); // Update updatedAt to the current time
+      holding.avgPrice = newAvgPrice; 
+      holding.Price = newPrice;
+      holding.netChange = netChange; // Update the netChange
+      holding.updatedAt = new Date(); 
 
       await holding.save();
     } else {
-      // If the stock doesn't exist in holdings, create a new entry
+      // If the stock does not exist, create a new holding
       const newHolding = new HoldingsModel({
         userId,
         name,
-        qty,
-        avgPrice: price, // Set average price as the price for the first purchase
-        netWorth: price * qty, // Net worth (value of the stocks)
+        qty: quantity, 
+        avgPrice: price,
+        Price: price,
+        netChange: netChange,  // Set the netChange
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -283,11 +308,11 @@ app.post("/buystock", async (req, res) => {
       await newHolding.save();
     }
 
-    // Record the order in the OrdersModel
+    // Save the order details to the OrdersModel
     const newOrder = new OrdersModel({
       userId,
       name,
-      qty,
+      qty: quantity,
       price,
       mode: "BUY",
     });
@@ -301,30 +326,69 @@ app.post("/buystock", async (req, res) => {
   }
 });
 
+async function getPreviousClose(stockName) {
+  const stock = data.find(item => item.symbol === stockName);
+
+  if (stock) {
+    const dateList = Object.keys(stock.data['Time Series (Daily)']);
+    const previousDate = dateList[1]; 
+
+    if (previousDate) {
+      return parseFloat(stock.data['Time Series (Daily)'][previousDate]['4. close']); 
+    } else {
+      console.log(`No previous closing price found for stock ${stockName}`);
+      return null;
+    }
+  } else {
+    console.log(`Stock ${stockName} not found in data`);
+    return null; 
+  }
+}
+async function getLatestClose(stockName) {
+  const stock = data.find(item => item.symbol === stockName);
+
+  if (stock) {
+    const dateList = Object.keys(stock.data['Time Series (Daily)']);
+    const LatestDate = dateList[0]; 
+
+    if (LatestDate) {
+      return parseFloat(stock.data['Time Series (Daily)'][LatestDate]['4. close']); 
+    } else {
+      console.log(`No Latest closing price found for stock ${stockName}`);
+      return null;
+    }
+  } else {
+    console.log(`Stock ${stockName} not found in data`);
+    return null; 
+  }
+}
+
 app.get("/holdings", async (req, res) => {
   const userId = req.query.userId;
 
   try {
     const holdings = await HoldingsModel.find({ userId });
-    const holdingsWithCalculatedValues = holdings.map((holding) => {
-      const { name, qty, avgPrice, netWorth, day } = holding;
-      const currentPrice = avgPrice || 0;  
-      const currentValue = qty * currentPrice;  
-      const pnl = currentValue - (qty * avgPrice);
-      const netChange = currentValue - netWorth;
-      // console.log(name, qty, avgPrice, currentPrice, currentValue, pnl, netChange);
-      const dayChange = currentPrice - (day || currentPrice);  // Compare today's price with previous day's price
-      return {
-        name,
-        qty,
-        avgCost: avgPrice,  // Use the avg cost (avgPrice)
-        ltp: currentPrice,  // Use the avgPrice as LTP (Last Traded Price)
-        currentValue,
-        pnl,
-        netChange,
-        dayChange,
-      };
-    });
+    const holdingsWithCalculatedValues = await Promise.all(
+      holdings.map(async (holding) => {
+        const { name, qty, avgPrice, Price, netChange } = holding;
+        const currentValue = qty * Price;
+        const pnl = currentValue - qty * avgPrice;
+        const netChangePercentage =
+          netChange !== undefined && Price !== 0
+            ? ((netChange / (Price - netChange)) * 100).toFixed(2)
+            : "N/A"; 
+
+        return {
+          name,
+          qty,
+          avgCost: avgPrice, // Use the avg cost (avgPrice)
+          ltp: Price, // Use the avgPrice as LTP (Last Traded Price)
+          currentValue,
+          pnl,
+          netChange:netChangePercentage,
+        };
+      })
+    );
 
     return res.status(200).json(holdingsWithCalculatedValues);
   } catch (error) {
@@ -335,6 +399,7 @@ app.get("/holdings", async (req, res) => {
 
 
 
+ 
 
 app.post("/sellstock", async (req, res) => {
   const { userId, name, qty, price } = req.body;
@@ -382,14 +447,18 @@ app.post("/sellstock", async (req, res) => {
 
 
 app.get("/allorders", async (req, res) => {
-  const  userId  = req.query.userId;
+  const userId = req.query.userId;
   try {
     let allOrders;
-      if (userId) {
-        allOrders = await OrdersModel.find({ userId }).populate('userId');
-      } else {
-        allOrders = await OrdersModel.find({}).populate('userId');
-      }
+    if (userId) {
+      allOrders = await OrdersModel.find({ userId })
+        .populate('userId')
+        .sort({ createdAt: -1 }); // Sort by createdAt, latest first
+    } else {
+      allOrders = await OrdersModel.find({})
+        .populate('userId')
+        .sort({ createdAt: -1 }); // Sort by createdAt, latest first
+    }
     // Return the orders with user data
     res.json(allOrders);
   } catch (err) {
@@ -397,6 +466,7 @@ app.get("/allorders", async (req, res) => {
     res.status(500).send("Error fetching orders");
   }
 });
+
 
 app.get("/sellstock", async (req, res) => {
   try {

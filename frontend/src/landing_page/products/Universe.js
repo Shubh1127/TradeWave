@@ -13,9 +13,9 @@ function Universe() {
       <div className="row text-center">
         <p>
           Want to know more about our technology stack? Check out the{" "}
-          <span className=" text-primary">Zerodha.tech </span>blog.
+          <span className=" text-primary">Tradewave.tech </span>blog.
         </p>
-        <h2 className="mt-5">The Zerodha Universe</h2>
+        <h2 className="mt-5">The Tradewave Universe</h2>
         <p className=" fs-6 mt-3">
           Extend your trading and investment experience even further with our
           partner platforms

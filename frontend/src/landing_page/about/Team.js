@@ -17,17 +17,12 @@ function Team() {
         </div>
         <div className="col mt-4 p-5" style={{ color: "rgb(66,66,66)" }}>
           <p>
-            Nithin bootstrapped and founded Tradwave in 2010 to overcome the
+            Shubham founded Tradewave in 2024 to overcome the
             hurdles he faced during his decade long stint as a trader. Today,
-            Tradwave has changed the landscape of the Indian broking industry.
+            Tradewave has changed the landscape of the Indian broking industry.
             <br></br>
             <br></br>
-             He
-            is a member of the SEBI Secondary Market Advisory Committee (SMAC)
-            and the Market Data Advisory Committee (MDAC).
-            <br></br>
-            <br></br>
-             Playing basketball is his zen.
+             Playing Cricket is his zen.
              <br></br>
              <br></br>
              

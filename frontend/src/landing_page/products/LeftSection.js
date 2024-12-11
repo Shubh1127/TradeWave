@@ -12,8 +12,8 @@ function LeftSection({imageURL,productName,productDescription,tryDemo,learnMore,
                     <p>{productDescription}</p>
                     <div className='d-flex  gap-3 '>
 
-                    <a href={tryDemo} style={{textDecoration:"none"}}>Try Demo <i class="fa-solid fa-arrow-right"></i></a>&nbsp;
-                    <a href={learnMore} style={{textDecoration:"none"}}>Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    {/* <a href={tryDemo} style={{textDecoration:"none"}}>Try Demo <i class="fa-solid fa-arrow-right"></i></a>&nbsp; */}
+                    {/* <a href={learnMore} style={{textDecoration:"none"}}>Learn More <i class="fa-solid fa-arrow-right"></i></a> */}
                     </div>
                     <div className='d-flex gap-3 mt-3'>
                     <a href={googlePlay}><img src="media/images/googlePlayBadge.svg"/></a>

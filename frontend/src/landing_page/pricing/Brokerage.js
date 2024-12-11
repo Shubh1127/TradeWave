@@ -40,7 +40,7 @@ function Brokerage() {
               ( brokerage + SEBI charges + transaction charges)<br/> SEBI Charges<br/>
               Charged at ₹10 per crore + GST by Securities and Exchange Board of
               India for regulating the markets.<br/> DP (Depository participant)<br/><br/>
-              charges ₹15.34 per scrip (₹3.5 CDSL fee + ₹9.5 Zerodha fee + ₹2.34
+              charges ₹15.34 per scrip (₹3.5 CDSL fee + ₹9.5 Tradewave fee + ₹2.34
               GST) is charged on the trading account ledger when stocks are
               sold, irrespective of quantity.<br/><br/> Female demat account holders (as
               first holder) will enjoy a discount of ₹0.25 per transaction on

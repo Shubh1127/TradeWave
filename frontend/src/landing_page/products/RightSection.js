@@ -6,7 +6,7 @@ function RightSection({imageURL,productName,productDescription,tryDemo}) {
                 <div className='col-3 ms-5  d-flex  justify-content-center flex-column'>
                     <h2>{productName}</h2>
                     <p>{productDescription}</p>
-                    <a href={tryDemo} style={{textDecoration:"none"}}>Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    {/* <a href={tryDemo} style={{textDecoration:"none"}}>Learn More <i class="fa-solid fa-arrow-right"></i></a> */}
                 </div>
                 <div className='col'></div>
                 <div className='col-6'>

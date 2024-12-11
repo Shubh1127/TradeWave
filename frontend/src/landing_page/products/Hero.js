@@ -5,9 +5,9 @@ function Hero() {
                     <div className='row  '>
                         <h1 className='mt-4'>Technology</h1>
                         <h3 className='mt-3 fs-5'>Sleek, modern, and intuitive trading platforms</h3>
-                        <p className='mt-3'> Check out our 
+                        {/* <p className='mt-3'> Check out our 
                         <a href="" className="me-5" style={{textDecoration:"none"}}> investments offerings<i class="fa-solid fa-arrow-right"></i>  </a>
-                        </p>
+                        </p> */}
                     </div>
                
             </div>

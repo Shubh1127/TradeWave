@@ -19,7 +19,7 @@ function Signup() {
 
         if (response.ok) {
             console.log('User registered:', result);
-            window.location.href = "http://localhost:3000";
+            window.location.href = "http://localhost:3000/login";
 
         } else {
             console.error('Error:', result.message);
@@ -27,7 +27,7 @@ function Signup() {
         }
     }
     let  onLogin= async()=>{
-        const dashboard=window.location.href="http://localhost:3000";
+        const dashboard=window.location.href="http://localhost:3000/login";
        
         
     }

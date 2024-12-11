@@ -6,7 +6,9 @@ const HoldingsSchema = new Schema(
     name: { type: String, required: true }, // Stock name
     qty: { type: Number, required: true, default: 0 }, // Total quantity held
     avgPrice: { type: Number, required: true, default: 0 }, // Average price of stock
-    netWorth: { type: Number, default: 0 }, // Computed: qty * avgPrice
+    Price: { type: Number, required: true, default: 0 }, // Current price of stock
+    PNL: { type: Number, default: 0 }, 
+    netChange: { type: Number, default: 0 }, // Difference between LTP and previous close
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
