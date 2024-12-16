@@ -75,63 +75,34 @@ passport.deserializeUser(async (id, done) => {
 mongoose.connect(url)
   .then(() => console.log("Connected to database"))
   .catch((err) => console.log("Problem in connecting to the Database", err));
-
-
-  // app.get('/', (req, res) => {
-  //   res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-  // });
-
-
-// app.get('/profile', requiresAuth(), (req, res) => {
-//   res.send(JSON.stringify(req.oidc.user));
-// });
-
-
-
   app.post("/signup", async (req, res) => {
     const { username, email, password } = req.body;
   
     if (!password) {
       return res.status(400).json({ message: "Password is required" });
     }
-  
     try {
-      // Check if the user already exists
       const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-  
       if (existingUser) {
         return res.status(400).json({ message: "User already registered" });
       }
-  
-      // Create a new user
       const newUser = new User({
         email,
         username,
       });
-  
-      // Register the new user
       const registeredUser = await User.register(newUser, password);
-
       res.status(201).json({ message: "User registered successfully", user: registeredUser });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "An error occurred during signup" });
     }
   });
-  
- 
-  
   app.post("/login", async (req, res, next) => {
     try {
-      // Find the user by username
       const user = await User.findOne({ username: req.body.username });
-  
-      // Check if user exists
       if (!user) {
         return res.status(404).json({ message: 'Username does not match. Go to Sign up.' });
       }
-  
-      // Authenticate using Passport
       passport.authenticate('local', (err, authenticatedUser, info) => {
         if (err) {
           console.error('Error during authentication:', err);
@@ -140,30 +111,23 @@ mongoose.connect(url)
         if (!authenticatedUser) {
           return res.status(401).json({ message: 'Password not matched' });
         }
-  
-        // Log in the user
         req.logIn(authenticatedUser, (err) => {
           if (err) {
             console.error('Login failed:', err);
             return res.status(500).json({ message: 'Login failed' });
           }
-  
-          // Send a successful login response
           return res.status(200).json({ message: 'Login successful', user: authenticatedUser });
         });
       })(req, res, next);
-  
     } catch (err) {
       console.error("Error in login route:", err);
       return res.status(500).json({ message: 'Internal server error' });
     }
   });
 const companies = ['IBM', 'AAPL', 'MSFT', 'GOOGL', 'TSLA', 'AMZN', 'NFLX', 'META', 'NVDA', 'JPM'];
-
 const stockData = [];
 async function fetchAndSaveData() {
     try {
-
         for (const symbol of companies) {
             await new Promise((resolve, reject) => {
                 const apiUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`;
@@ -182,8 +146,6 @@ async function fetchAndSaveData() {
                 });
             });
         }
-
-        // Write data to data.js
         const formattedData = `const stockData = ${JSON.stringify(stockData, null, 2)};\n\nmodule.exports = stockData;`;
         fs.writeFile('./data.js', formattedData, (err) => {
           if (err) {
@@ -203,12 +165,10 @@ async function fetchAndSaveData() {
         console.error('Failed to fetch or save data:', err);
     }
 }
-
 // fetchAndSaveData();
 app.get('/api/stocks', (req, res) => {
-  res.json(stockData); // Send stock data as JSON
+  res.json(stockData); 
 });
-
   app.get('/login',(req,res)=>{
     try{
       if(!req.isAuthenticated()){
@@ -221,11 +181,7 @@ app.get('/api/stocks', (req, res) => {
     }catch(error){
       console.error(error)
     }
-    
   })
- 
-
-
 app.get("/logout",(req,res,next)=>{
   req.logout((err)=>{
     if(err){
@@ -237,7 +193,6 @@ app.get("/logout",(req,res,next)=>{
     });
   })
 })
-// Fetch all holdings
 app.get("/allHoldings", async (req, res) => {
   try {
     let allHoldings = await HoldingsModel.find({});
@@ -246,8 +201,6 @@ app.get("/allHoldings", async (req, res) => {
     res.status(500).send("Error fetching holdings");
   }
 });
-
-// Fetch all positions
 app.get("/allPositions", async (req, res) => {
   try {
     let allPositions = await PositionsModel.find({});
@@ -258,29 +211,19 @@ app.get("/allPositions", async (req, res) => {
 });
 app.post("/buystock", async (req, res) => {
   const { userId, name, qty, price } = req.body;
-
   try {
-    // Ensure the quantity is treated as a number
-    const quantity = Number(qty);  // Convert qty to number if it's coming as a string
-
+    const quantity = Number(qty); 
     if (isNaN(quantity) || quantity <= 0) {
       return res.status(400).json({ message: "Invalid quantity" });
     }
-
-    // Fetch the previous day's closing price for the stock
     const previousClose = await getPreviousClose(name);
-
     if (previousClose === null) {
       return res.status(400).json({ message: `Previous close data not found for ${name}` });
     }
-
     // Calculate netChange as LTP - previous close
     const netChange = price - previousClose;
-
     let holding = await HoldingsModel.findOne({ userId, name });
-
     if (holding) {
-      // If the stock already exists, update the details
       const totalCost = (holding.avgPrice * holding.qty) + (price * quantity); 
       const newQty = holding.qty + quantity; 
       const newAvgPrice = totalCost / newQty; 
@@ -289,27 +232,22 @@ app.post("/buystock", async (req, res) => {
       holding.qty = newQty;
       holding.avgPrice = newAvgPrice; 
       holding.Price = newPrice;
-      holding.netChange = netChange; // Update the netChange
+      holding.netChange = netChange;
       holding.updatedAt = new Date(); 
-
       await holding.save();
     } else {
-      // If the stock does not exist, create a new holding
       const newHolding = new HoldingsModel({
         userId,
         name,
         qty: quantity, 
         avgPrice: price,
         Price: price,
-        netChange: netChange,  // Set the netChange
+        netChange: netChange,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-
       await newHolding.save();
     }
-
-    // Save the order details to the OrdersModel
     const newOrder = new OrdersModel({
       userId,
       name,
@@ -317,25 +255,21 @@ app.post("/buystock", async (req, res) => {
       price,
       mode: "BUY",
     });
-
     await newOrder.save();
-
     return res.status(200).json({ message: "Stock bought successfully!" });
   } catch (error) {
     console.error("Error buying stock:", error);
     return res.status(500).json({ message: "Failed to buy stock", error });
   }
 });
-
 async function getPreviousClose(stockName) {
   const stock = data.find(item => item.symbol === stockName);
-
   if (stock) {
     const dateList = Object.keys(stock.data['Time Series (Daily)']);
     const previousDate = dateList[1]; 
-
     if (previousDate) {
-      return parseFloat(stock.data['Time Series (Daily)'][previousDate]['4. close']); 
+      const value=parseFloat(stock.data['Time Series (Daily)'][previousDate]['4. close']); 
+      return value;
     } else {
       console.log(`No previous closing price found for stock ${stockName}`);
       return null;
@@ -345,15 +279,10 @@ async function getPreviousClose(stockName) {
     return null; 
   }
 }
-
-
 app.get("/holdings", async (req, res) => {
   const userId = req.query.userId;
-
   try {
-    // Update PNL before fetching holdings
     await HoldingsModel.updatePNL();
-
     const holdings = await HoldingsModel.find({ userId });
     const holdingsWithCalculatedValues = await Promise.all(
       holdings.map(async (holding) => {
@@ -361,9 +290,8 @@ app.get("/holdings", async (req, res) => {
         const currentValue = qty * Price;
         const netChangePercentage =
           netChange !== undefined && Price !== 0
-            ? ((netChange / (Price - netChange)) * 100).toFixed(2)
+            ? ((netChange / Price ) * 100).toFixed(2)
             : "N/A";
-
         return {
           name,
           qty,

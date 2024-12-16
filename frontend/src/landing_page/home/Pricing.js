@@ -7,7 +7,7 @@ function Pricing() {
                     <div className='col-4'>
                         <h1 className=' mb-5'>Unbeatable pricing</h1>
                         <p>We pioneered the concept of discount broking and price transparency in India. Flat fees and no hidden charges.</p>
-                        <a href=''>see pricing <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href='/pricing'>see pricing <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                     <div className='col-2'></div>
                     <div className='col-6'>
