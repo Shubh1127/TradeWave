@@ -5,11 +5,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "IBM",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "229.2300",
+          "2. high": "230.2000",
+          "3. low": "227.6200",
+          "4. close": "228.9700",
+          "5. volume": "3651346"
+        },
+        "2024-12-16": {
+          "1. open": "230.7300",
+          "2. high": "231.0300",
+          "3. low": "226.8800",
+          "4. close": "229.3300",
+          "5. volume": "3610257"
+        },
         "2024-12-13": {
           "1. open": "232.2500",
           "2. high": "233.7750",
@@ -695,20 +709,6 @@ const stockData = [
           "3. low": "189.1800",
           "4. close": "191.5000",
           "5. volume": "3336806"
-        },
-        "2024-07-26": {
-          "1. open": "190.5100",
-          "2. high": "193.5700",
-          "3. low": "189.6220",
-          "4. close": "191.7500",
-          "5. volume": "4294875"
-        },
-        "2024-07-25": {
-          "1. open": "186.8000",
-          "2. high": "196.2600",
-          "3. low": "185.3000",
-          "4. close": "191.9800",
-          "5. volume": "9532802"
         }
       }
     }
@@ -719,11 +719,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "AAPL",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "250.0800",
+          "2. high": "253.8300",
+          "3. low": "249.7800",
+          "4. close": "253.4800",
+          "5. volume": "51356360"
+        },
+        "2024-12-16": {
+          "1. open": "247.9900",
+          "2. high": "251.3800",
+          "3. low": "247.6500",
+          "4. close": "251.0400",
+          "5. volume": "51694753"
+        },
         "2024-12-13": {
           "1. open": "247.8150",
           "2. high": "249.2902",
@@ -1409,20 +1423,6 @@ const stockData = [
           "3. low": "215.7500",
           "4. close": "218.2400",
           "5. volume": "36311778"
-        },
-        "2024-07-26": {
-          "1. open": "218.7000",
-          "2. high": "219.4900",
-          "3. low": "216.0100",
-          "4. close": "217.9600",
-          "5. volume": "41601345"
-        },
-        "2024-07-25": {
-          "1. open": "218.9300",
-          "2. high": "220.8500",
-          "3. low": "214.6200",
-          "4. close": "217.4900",
-          "5. volume": "51391199"
         }
       }
     }
@@ -1433,11 +1433,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "MSFT",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "451.0100",
+          "2. high": "455.2900",
+          "3. low": "449.5700",
+          "4. close": "454.4600",
+          "5. volume": "22733494"
+        },
+        "2024-12-16": {
+          "1. open": "447.2700",
+          "2. high": "452.1800",
+          "3. low": "445.2800",
+          "4. close": "451.5900",
+          "5. volume": "23598834"
+        },
         "2024-12-13": {
           "1. open": "448.4350",
           "2. high": "451.4300",
@@ -2123,20 +2137,6 @@ const stockData = [
           "3. low": "424.7042",
           "4. close": "426.7300",
           "5. volume": "15125836"
-        },
-        "2024-07-26": {
-          "1. open": "418.2000",
-          "2. high": "428.9150",
-          "3. low": "417.2700",
-          "4. close": "425.2700",
-          "5. volume": "23583839"
-        },
-        "2024-07-25": {
-          "1. open": "428.8000",
-          "2. high": "429.8000",
-          "3. low": "417.5100",
-          "4. close": "418.4000",
-          "5. volume": "29943795"
         }
       }
     }
@@ -2147,11 +2147,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "GOOGL",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "197.2500",
+          "2. high": "201.4200",
+          "3. low": "194.9800",
+          "4. close": "195.4200",
+          "5. volume": "43504025"
+        },
+        "2024-12-16": {
+          "1. open": "192.8700",
+          "2. high": "199.0000",
+          "3. low": "192.6200",
+          "4. close": "196.6600",
+          "5. volume": "44934901"
+        },
         "2024-12-13": {
           "1. open": "191.0100",
           "2. high": "192.7300",
@@ -2837,20 +2851,6 @@ const stockData = [
           "3. low": "167.9900",
           "4. close": "169.5300",
           "5. volume": "20293822"
-        },
-        "2024-07-26": {
-          "1. open": "167.1500",
-          "2. high": "168.0900",
-          "3. low": "164.0600",
-          "4. close": "167.0000",
-          "5. volume": "41336886"
-        },
-        "2024-07-25": {
-          "1. open": "172.5200",
-          "2. high": "173.4200",
-          "3. low": "167.1900",
-          "4. close": "167.2800",
-          "5. volume": "44851973"
         }
       }
     }
@@ -2861,11 +2861,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "TSLA",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "475.9000",
+          "2. high": "483.9900",
+          "3. low": "457.5101",
+          "4. close": "479.8600",
+          "5. volume": "128780529"
+        },
+        "2024-12-16": {
+          "1. open": "441.0900",
+          "2. high": "463.1900",
+          "3. low": "436.1500",
+          "4. close": "463.0200",
+          "5. volume": "114083811"
+        },
         "2024-12-13": {
           "1. open": "420.0000",
           "2. high": "436.3000",
@@ -3551,20 +3565,6 @@ const stockData = [
           "3. low": "224.7000",
           "4. close": "232.1000",
           "5. volume": "129201789"
-        },
-        "2024-07-26": {
-          "1. open": "221.1900",
-          "2. high": "222.2799",
-          "3. low": "215.3300",
-          "4. close": "219.8000",
-          "5. volume": "94604145"
-        },
-        "2024-07-25": {
-          "1. open": "216.8000",
-          "2. high": "226.0000",
-          "3. low": "216.2310",
-          "4. close": "220.2500",
-          "5. volume": "100636466"
         }
       }
     }
@@ -3575,11 +3575,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "AMZN",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "232.3900",
+          "2. high": "232.7300",
+          "3. low": "227.8500",
+          "4. close": "231.1500",
+          "5. volume": "35948131"
+        },
+        "2024-12-16": {
+          "1. open": "230.2300",
+          "2. high": "233.0000",
+          "3. low": "228.0100",
+          "4. close": "232.9300",
+          "5. volume": "37552096"
+        },
         "2024-12-13": {
           "1. open": "228.4000",
           "2. high": "230.2000",
@@ -4265,20 +4279,6 @@ const stockData = [
           "3. low": "182.3800",
           "4. close": "183.2000",
           "5. volume": "33270123"
-        },
-        "2024-07-26": {
-          "1. open": "180.3900",
-          "2. high": "183.1900",
-          "3. low": "180.2400",
-          "4. close": "182.5000",
-          "5. volume": "29505964"
-        },
-        "2024-07-25": {
-          "1. open": "182.9100",
-          "2. high": "183.8958",
-          "3. low": "176.8000",
-          "4. close": "179.8500",
-          "5. volume": "44464163"
         }
       }
     }
@@ -4289,11 +4289,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "NFLX",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "921.5400",
+          "2. high": "928.4500",
+          "3. low": "916.4200",
+          "4. close": "919.1300",
+          "5. volume": "2409103"
+        },
+        "2024-12-16": {
+          "1. open": "923.9400",
+          "2. high": "928.9400",
+          "3. low": "919.5000",
+          "4. close": "921.0800",
+          "5. volume": "2674892"
+        },
         "2024-12-13": {
           "1. open": "916.8100",
           "2. high": "925.5500",
@@ -4979,20 +4993,6 @@ const stockData = [
           "3. low": "623.9300",
           "4. close": "626.9600",
           "5. volume": "2400537"
-        },
-        "2024-07-26": {
-          "1. open": "645.0000",
-          "2. high": "646.9899",
-          "3. low": "629.7700",
-          "4. close": "631.3700",
-          "5. volume": "3120659"
-        },
-        "2024-07-25": {
-          "1. open": "641.0000",
-          "2. high": "649.9800",
-          "3. low": "621.7001",
-          "4. close": "634.0900",
-          "5. volume": "4554539"
         }
       }
     }
@@ -5003,11 +5003,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "META",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "626.1700",
+          "2. high": "632.3700",
+          "3. low": "616.5400",
+          "4. close": "619.4400",
+          "5. volume": "12305837"
+        },
+        "2024-12-16": {
+          "1. open": "629.9750",
+          "2. high": "631.1500",
+          "3. low": "618.5800",
+          "4. close": "624.2400",
+          "5. volume": "10885625"
+        },
         "2024-12-13": {
           "1. open": "627.2200",
           "2. high": "631.0800",
@@ -5693,20 +5707,6 @@ const stockData = [
           "3. low": "465.0200",
           "4. close": "465.7100",
           "5. volume": "11339630"
-        },
-        "2024-07-26": {
-          "1. open": "464.1950",
-          "2. high": "469.7700",
-          "3. low": "459.4200",
-          "4. close": "465.7000",
-          "5. volume": "14222388"
-        },
-        "2024-07-25": {
-          "1. open": "463.2600",
-          "2. high": "463.5480",
-          "3. low": "442.6500",
-          "4. close": "453.4100",
-          "5. volume": "18240489"
         }
       }
     }
@@ -5717,11 +5717,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "NVDA",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "129.0900",
+          "2. high": "131.5900",
+          "3. low": "126.8600",
+          "4. close": "130.3900",
+          "5. volume": "253027315"
+        },
+        "2024-12-16": {
+          "1. open": "134.1800",
+          "2. high": "134.4000",
+          "3. low": "130.4200",
+          "4. close": "132.0000",
+          "5. volume": "237951130"
+        },
         "2024-12-13": {
           "1. open": "138.9400",
           "2. high": "139.6000",
@@ -6407,20 +6421,6 @@ const stockData = [
           "3. low": "111.3000",
           "4. close": "111.5900",
           "5. volume": "248152068"
-        },
-        "2024-07-26": {
-          "1. open": "116.1900",
-          "2. high": "116.2000",
-          "3. low": "111.5800",
-          "4. close": "113.0600",
-          "5. volume": "293399073"
-        },
-        "2024-07-25": {
-          "1. open": "113.0400",
-          "2. high": "116.6300",
-          "3. low": "106.3000",
-          "4. close": "112.2800",
-          "5. volume": "460067019"
         }
       }
     }
@@ -6431,11 +6431,25 @@ const stockData = [
       "Meta Data": {
         "1. Information": "Daily Prices (open, high, low, close) and Volumes",
         "2. Symbol": "JPM",
-        "3. Last Refreshed": "2024-12-13",
+        "3. Last Refreshed": "2024-12-17",
         "4. Output Size": "Compact",
         "5. Time Zone": "US/Eastern"
       },
       "Time Series (Daily)": {
+        "2024-12-17": {
+          "1. open": "238.6500",
+          "2. high": "239.0200",
+          "3. low": "236.6300",
+          "4. close": "238.3600",
+          "5. volume": "8083635"
+        },
+        "2024-12-16": {
+          "1. open": "240.6100",
+          "2. high": "240.6700",
+          "3. low": "237.5200",
+          "4. close": "239.5800",
+          "5. volume": "9032044"
+        },
         "2024-12-13": {
           "1. open": "242.0700",
           "2. high": "242.7150",
@@ -7121,20 +7135,6 @@ const stockData = [
           "3. low": "210.5450",
           "4. close": "210.8500",
           "5. volume": "6533636"
-        },
-        "2024-07-26": {
-          "1. open": "209.2400",
-          "2. high": "213.1600",
-          "3. low": "208.6200",
-          "4. close": "212.2400",
-          "5. volume": "8027787"
-        },
-        "2024-07-25": {
-          "1. open": "208.6500",
-          "2. high": "210.1900",
-          "3. low": "208.0500",
-          "4. close": "208.6700",
-          "5. volume": "6403774"
         }
       }
     }

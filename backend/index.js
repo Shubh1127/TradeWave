@@ -18,6 +18,7 @@ const data = require('./data');
 const { HoldingsModel } = require('./model/HoldingsModel');
 const {HoldingSchema}=require('./schema/HoldingSchema')
 const { OrdersModel } = require('./model/OrdersModel');
+const userModel = require('./model/userModel');
 const port = process.env.PORT || 3002;
 const url = process.env.MONGO_URL;
 const app = express();
@@ -203,10 +204,10 @@ app.get("/allHoldings", async (req, res) => {
 });
 app.get("/allPositions", async (req, res) => {
   try {
-    let allPositions = await PositionsModel.find({});
-    res.json(allPositions);
+    let allHoldings = await HoldingsModel.find({});
+    res.json(allHoldings);
   } catch (err) {
-    res.status(500).send("Error fetching positions");
+    res.status(500).send("Error fetching holdings");
   }
 });
 app.post("/buystock", async (req, res) => {
